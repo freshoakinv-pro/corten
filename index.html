@@ -149,6 +149,16 @@
   .joinform input:focus{outline:none;border-color:var(--corten)}
   .formnote{color:var(--faint);font-size:13px;margin-top:16px}
 
+  /* ---- resources ---- */
+  .reslist{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:50px}
+  @media(max-width:860px){.reslist{grid-template-columns:1fr}}
+  .rescard{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px 26px;transition:.25s;color:inherit}
+  .rescard:hover{border-color:var(--corten);transform:translateY(-3px)}
+  .rescard .rk{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--corten);font-weight:700;margin-bottom:14px}
+  .rescard h3{font-size:19px;margin:0 0 8px;font-weight:700}
+  .rescard p{color:var(--dim);font-size:14px;margin:0 0 18px;font-weight:400;line-height:1.55;flex-grow:1}
+  .rescard .rmore{color:var(--nervve);font-size:13px;letter-spacing:.04em;font-weight:600}
+
   /* ---- footer ---- */
   footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--faint);font-size:14px}
   .foot-in{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
@@ -270,6 +280,7 @@
       <a href="#platform">Platform</a>
       <a href="#identity">Corten &amp; Nervve<sup>™</sup></a>
       <a href="#team">Team</a>
+      <a href="#resources">Resources</a>
       <a class="cta" href="#join">Get on board</a>
     </div>
   </div>
@@ -595,6 +606,38 @@
   </div>
 </section>
 
+<!-- RESOURCES -->
+<section class="band" id="resources">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Resources</div>
+      <h2 class="sec-h">From the desk at Corten.</h2>
+      <p class="sec-sub">Case studies, white papers and news on the work we're doing and the questions we're chasing.</p>
+    </div>
+    <div class="reslist">
+      <a class="rescard reveal" href="#">
+        <div class="rk">Case study</div>
+        <h3>Coming soon</h3>
+        <p>First case study from our Singapore deployments — to be published as engagements complete.</p>
+        <span class="rmore">Read →</span>
+      </a>
+      <a class="rescard reveal" href="#">
+        <div class="rk">White paper</div>
+        <h3>Coming soon</h3>
+        <p>Our thesis on distributed capacity markets and the role of an intelligence layer above the grid.</p>
+        <span class="rmore">Read →</span>
+      </a>
+      <a class="rescard reveal" href="#">
+        <div class="rk">News</div>
+        <h3>Coming soon</h3>
+        <p>Press releases and announcements as we step out of stealth.</p>
+        <span class="rmore">Read →</span>
+      </a>
+    </div>
+    <p class="tba reveal">Publications will appear here as they're released.</p>
+  </div>
+</section>
+
 <!-- GET ON BOARD -->
 <section class="band" id="join">
   <div class="wrap">
@@ -654,6 +697,7 @@
         <a href="#edge">The edge</a>
         <a href="#platform">Platform</a>
         <a href="#team">Team</a>
+        <a href="#resources">Resources</a>
       </div>
       <div class="footcol">
         <b>Connect</b>

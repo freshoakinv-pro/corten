@@ -239,6 +239,12 @@
   .thesis .sub{font-size:14px;color:var(--dim);max-width:76ch;margin:20px auto 0;font-weight:400;line-height:1.55}
 
   /* ---- where we start: editorial statement ---- */
+  section.band.mbs{position:relative;isolation:isolate;overflow:hidden}
+  section.band.mbs::before{content:"";position:absolute;inset:0;z-index:-2;
+    background:url('https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=2000&q=70') center/cover no-repeat;
+    opacity:.35;filter:saturate(.7) brightness(.75)}
+  section.band.mbs::after{content:"";position:absolute;inset:0;z-index:-1;
+    background:linear-gradient(180deg,rgba(12,17,36,.55),rgba(12,17,36,.85))}
   .startband{text-align:center;max-width:82ch;margin:0 auto}
   .startband .rule{width:46px;height:2px;background:var(--corten);margin:0 auto 24px}
   .startband h2{font-weight:700;font-size:clamp(22px,3.2vw,34px);line-height:1.3;margin:0;letter-spacing:-.015em}
@@ -503,7 +509,7 @@
 </section>
 
 <!-- WHERE WE START -->
-<section class="band alt" id="start">
+<section class="band alt mbs" id="start">
   <div class="wrap">
     <div class="startband reveal">
       <div class="rule"></div>

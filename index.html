@@ -48,10 +48,10 @@
   /* ---- hero ---- */
   .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
   #neural{position:absolute;inset:0;width:100%;height:100%;z-index:0}
-  .hero-fade{position:absolute;inset:0;z-index:1;
-    background:radial-gradient(ellipse at 28% 38%,rgba(236,117,37,.12),transparent 55%),
-               radial-gradient(ellipse at 78% 72%,rgba(39,57,107,.45),transparent 55%),
-               linear-gradient(180deg,rgba(12,17,36,.2),rgba(12,17,36,.72) 80%,var(--bg))}
+  .hero-fade{position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(ellipse at 28% 38%,rgba(236,117,37,.10),transparent 55%),
+               radial-gradient(ellipse at 78% 72%,rgba(39,57,107,.30),transparent 55%),
+               linear-gradient(180deg,rgba(12,17,36,.05),rgba(12,17,36,.55) 85%,var(--bg))}
   .hero-in{position:relative;z-index:2;padding-top:80px}
   .hero h1{font-size:clamp(34px,6vw,68px);max-width:16ch;margin:18px 0 0;font-weight:600}
   .hero h1 .glow{color:var(--corten)}
@@ -104,9 +104,13 @@
   /* ---- identity: brain + CNS ---- */
   .ident{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:56px}
   @media(max-width:820px){.ident{grid-template-columns:1fr}}
-  .idcard{border-radius:18px;padding:38px 34px;border:1px solid var(--line);position:relative;overflow:hidden}
-  .idcard.corten{background:radial-gradient(circle at 80% 0%,rgba(236,117,37,.14),transparent 60%)}
-  .idcard.nervve{background:radial-gradient(circle at 80% 0%,rgba(96,124,210,.16),transparent 60%)}
+  .idcard{border-radius:18px;padding:38px 34px;border:1px solid var(--line);position:relative;overflow:hidden;isolation:isolate}
+  .idcard::before{content:"";position:absolute;inset:0;z-index:-2;background-size:cover;background-position:center;opacity:.28;filter:saturate(.6) contrast(1.05)}
+  .idcard::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(160deg,rgba(12,17,36,.55),rgba(12,17,36,.85))}
+  .idcard.corten::before{background-image:url('https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=1200&q=70')}
+  .idcard.nervve::before{background-image:url('https://images.unsplash.com/photo-1581090700227-1e37b190418e?auto=format&fit=crop&w=1200&q=70')}
+  .idcard.corten{background:radial-gradient(circle at 80% 0%,rgba(236,117,37,.18),transparent 60%)}
+  .idcard.nervve{background:radial-gradient(circle at 80% 0%,rgba(96,124,210,.20),transparent 60%)}
   .idcard .tag{font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:600}
   .idcard.corten .tag{color:var(--corten)} .idcard.nervve .tag{color:#92a8ee}
   .idcard h3{font-size:28px;margin:10px 0 4px}
@@ -704,7 +708,7 @@ document.getElementById('joinForm').addEventListener('submit',e=>{
 (function(){
   const c=document.getElementById('neural'),x=c.getContext('2d');
   let w,h,nodes=[],raf,DPR=Math.min(devicePixelRatio||1,2);
-  const COUNT=()=>Math.min(38,Math.floor(innerWidth/40));
+  const COUNT=()=>Math.min(60,Math.floor(innerWidth/28));
   function resize(){
     w=c.width=innerWidth*DPR;h=c.height=c.offsetHeight*DPR;
     c.style.width=innerWidth+'px';
@@ -717,21 +721,21 @@ document.getElementById('joinForm').addEventListener('submit',e=>{
   }
   function tick(){
     x.clearRect(0,0,w,h);
-    const LINK=160*DPR;
+    const LINK=180*DPR;
     for(let i=0;i<nodes.length;i++){
       const a=nodes[i];a.x+=a.vx;a.y+=a.vy;
       if(a.x<0||a.x>w)a.vx*=-1;if(a.y<0||a.y>h)a.vy*=-1;
       for(let j=i+1;j<nodes.length;j++){
         const b=nodes[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);
         if(d<LINK){
-          const o=(1-d/LINK)*.5;
-          x.strokeStyle='rgba(120,146,224,'+o*.28+')';   /* faint connecting lines */
-          x.lineWidth=DPR*.5;
+          const o=(1-d/LINK)*.8;
+          x.strokeStyle='rgba(160,185,255,'+o*.55+')';
+          x.lineWidth=DPR*.7;
           x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke();
         }
       }
-      x.beginPath();x.arc(a.x,a.y,a.r,0,7);
-      x.fillStyle='rgba(236,117,37,.45)';x.fill();      /* dim nodes — ambient texture */
+      x.beginPath();x.arc(a.x,a.y,a.r*1.4,0,7);
+      x.fillStyle='rgba(236,117,37,.85)';x.fill();
     }
     raf=requestAnimationFrame(tick);
   }

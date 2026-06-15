@@ -169,6 +169,7 @@
   .pillar{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:30px 26px;position:relative;overflow:hidden;transition:.25s}
   .pillar:hover{transform:translateY(-3px);border-color:var(--corten-deep)}
   .pillar::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--corten),transparent)}
+  .pillar .phead{display:block;width:calc(100% + 52px);margin:-30px -26px 22px;aspect-ratio:16/9;object-fit:cover;border-bottom:1px solid var(--line);filter:saturate(.85) brightness(.85)}
   .pillar .pic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:rgba(236,117,37,.1);color:var(--corten);margin-bottom:18px}
   .pillar .pic svg{width:24px;height:24px}
   .pillar h3{font-size:19px;margin:0 0 10px}
@@ -294,16 +295,19 @@
     </div>
     <div class="pillars">
       <div class="pillar reveal">
+        <img class="phead" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=70" alt="Data centre server racks" loading="lazy" />
         <div class="pic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="5" rx="1"/><rect x="3" y="11" width="18" height="5" rx="1"/><path d="M7 6.5h0M7 13.5h0M12 19v2M8 21h8"/></svg></div>
         <h3>AI &amp; data centres</h3>
         <p>Hyperscale data centres are commissioning at a scale unimaginable a few years ago — each one a small city's worth of demand, drawing hard and fast, with power-quality needs that strain the network around them.</p>
       </div>
       <div class="pillar reveal">
+        <img class="phead" src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=1200&q=70" alt="EV DC fast charger" loading="lazy" />
         <div class="pic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg></div>
         <h3>Everything is electrifying</h3>
         <p>EV fleets, electrified industry and advanced manufacturing are reshaping how, and how unpredictably, power gets drawn. Across whole regions the shape of demand is changing as fast as its size.</p>
       </div>
       <div class="pillar reveal">
+        <img class="phead" src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1200&q=70" alt="High-voltage transmission grid" loading="lazy" />
         <div class="pic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
         <h3>But the grid can't keep up</h3>
         <p>The equipment is on the shelf — putting it in the ground is not. New capacity means cables, road-opening approvals, and renewing assets laid decades ago: 18 to 30 months, even when everything goes right.</p>

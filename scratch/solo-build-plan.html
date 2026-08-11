@@ -1,0 +1,1060 @@
+<title>Nervve — solo build plan with Claude Code</title>
+<meta name="description" content="A pragmatic playbook for a single founder implementing the four phases of the Nervve platform using Claude Code as their engineering pair." />
+
+<style>
+  :root {
+    --ground: #F7F4EE;
+    --ground-2: #EFEAE0;
+    --panel: #FFFFFF;
+    --panel-2: #F3EEE4;
+    --code-bg: #1A1F2E;
+    --code-fg: #E6E9F2;
+    --code-com: #8892B0;
+    --code-key: #C89BFF;
+    --code-str: #B2E8B4;
+    --code-num: #F4A65A;
+    --rule: #DFD7C7;
+    --rule-strong: #C7BDA8;
+
+    --ink: #0F1631;
+    --ink-2: #2C3554;
+    --muted: #6B7391;
+    --faint: #96998F;
+
+    --navy: #27396B;
+    --navy-deep: #1B274C;
+    --corten: #EC7525;
+    --corten-deep: #C85F17;
+    --corten-wash: rgba(236, 117, 37, 0.10);
+    --navy-wash: rgba(39, 57, 107, 0.08);
+
+    --good: #4F7A5E;
+    --good-tint: #D4E2D5;
+    --warn: #B58729;
+    --warn-tint: #F3E4BE;
+    --bad: #B0342B;
+    --bad-tint: #F5D9D5;
+
+    --serif: Iowan Old Style, "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+    --maxw: 1180px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #0C1124;
+      --ground-2: #0F1631;
+      --panel: #141B36;
+      --panel-2: #1A2244;
+      --code-bg: #0A0F20;
+      --code-fg: #E6E9F2;
+      --code-com: #64718F;
+      --code-key: #C89BFF;
+      --code-str: #A6DCA8;
+      --code-num: #F4A65A;
+      --rule: #2A3358;
+      --rule-strong: #3A4675;
+      --ink: #EEF1F7;
+      --ink-2: #C6CCE0;
+      --muted: #9AA6C2;
+      --faint: #64718F;
+      --navy: #6A82C7;
+      --navy-deep: #4A5FA0;
+      --corten: #F4A65A;
+      --corten-deep: #EC7525;
+      --corten-wash: rgba(244, 166, 90, 0.12);
+      --navy-wash: rgba(106, 130, 199, 0.10);
+      --good: #7DAF8D;
+      --good-tint: rgba(125, 175, 141, 0.16);
+      --warn: #E0B04B;
+      --warn-tint: rgba(224, 176, 75, 0.16);
+      --bad: #E36457;
+      --bad-tint: rgba(227, 100, 87, 0.16);
+    }
+  }
+
+  :root[data-theme="light"] {
+    --ground: #F7F4EE; --ground-2: #EFEAE0; --panel: #FFFFFF; --panel-2: #F3EEE4;
+    --code-bg: #1A1F2E; --code-fg: #E6E9F2; --code-com: #8892B0; --code-key: #C89BFF; --code-str: #B2E8B4; --code-num: #F4A65A;
+    --rule: #DFD7C7; --rule-strong: #C7BDA8;
+    --ink: #0F1631; --ink-2: #2C3554; --muted: #6B7391; --faint: #96998F;
+    --navy: #27396B; --navy-deep: #1B274C; --corten: #EC7525; --corten-deep: #C85F17;
+    --corten-wash: rgba(236, 117, 37, 0.10); --navy-wash: rgba(39, 57, 107, 0.08);
+    --good: #4F7A5E; --good-tint: #D4E2D5;
+    --warn: #B58729; --warn-tint: #F3E4BE;
+    --bad: #B0342B; --bad-tint: #F5D9D5;
+  }
+  :root[data-theme="dark"] {
+    --ground: #0C1124; --ground-2: #0F1631; --panel: #141B36; --panel-2: #1A2244;
+    --code-bg: #0A0F20; --code-fg: #E6E9F2; --code-com: #64718F; --code-key: #C89BFF; --code-str: #A6DCA8; --code-num: #F4A65A;
+    --rule: #2A3358; --rule-strong: #3A4675;
+    --ink: #EEF1F7; --ink-2: #C6CCE0; --muted: #9AA6C2; --faint: #64718F;
+    --navy: #6A82C7; --navy-deep: #4A5FA0; --corten: #F4A65A; --corten-deep: #EC7525;
+    --corten-wash: rgba(244, 166, 90, 0.12); --navy-wash: rgba(106, 130, 199, 0.10);
+    --good: #7DAF8D; --good-tint: rgba(125, 175, 141, 0.16);
+    --warn: #E0B04B; --warn-tint: rgba(224, 176, 75, 0.16);
+    --bad: #E36457; --bad-tint: rgba(227, 100, 87, 0.16);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: var(--sans); font-size: 15px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+
+  .page {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 56px 32px 96px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  @media (min-width: 1000px) {
+    .page { grid-template-columns: 220px minmax(0, 1fr); gap: 48px; }
+  }
+
+  aside.rail { display: none; }
+  @media (min-width: 1000px) {
+    aside.rail {
+      display: block; position: sticky; top: 40px; align-self: start;
+      padding: 4px 0 4px 0; border-right: 1px solid var(--rule); padding-right: 20px;
+    }
+    aside.rail .rail-eyebrow {
+      font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--faint); margin-bottom: 14px; font-weight: 600;
+    }
+    aside.rail ol { list-style: none; padding: 0; margin: 0; counter-reset: rl; }
+    aside.rail li {
+      counter-increment: rl; font-size: 12.5px; line-height: 1.35;
+      margin-bottom: 10px; color: var(--muted);
+      display: flex; gap: 8px; align-items: baseline;
+    }
+    aside.rail li::before {
+      content: counter(rl, decimal-leading-zero);
+      font-family: var(--mono); font-size: 10.5px; color: var(--faint);
+      flex-shrink: 0;
+    }
+    aside.rail a { color: inherit; text-decoration: none; transition: color .15s; }
+    aside.rail a:hover { color: var(--corten); }
+  }
+
+  main { min-width: 0; }
+
+  /* --- Masthead --- */
+  header.mast { border-bottom: 1px solid var(--rule); padding-bottom: 28px; margin-bottom: 40px; }
+  .masthead-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 24px; flex-wrap: wrap; margin-bottom: 22px;
+  }
+  .brand {
+    font-family: var(--serif); font-style: italic; font-size: 14px;
+    letter-spacing: 0.01em; color: var(--muted);
+  }
+  .brand b { font-style: normal; font-weight: 700; color: var(--ink); }
+  .meta {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+    color: var(--faint); text-transform: uppercase;
+  }
+  .meta span + span { margin-left: 18px; }
+  header.mast .eyebrow {
+    font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--navy); font-weight: 700; margin-bottom: 14px;
+  }
+  header.mast h1 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(30px, 4.6vw, 46px); line-height: 1.08;
+    letter-spacing: -0.015em; margin: 0 0 18px;
+    text-wrap: balance; max-width: 24ch; color: var(--ink);
+  }
+  header.mast h1 em { font-style: italic; color: var(--corten-deep); }
+  header.mast .kicker {
+    color: var(--muted); font-size: 16px; line-height: 1.55;
+    max-width: 68ch; margin: 0;
+  }
+
+  .companion-note {
+    margin-top: 20px; padding: 14px 18px;
+    background: var(--navy-wash); border-left: 3px solid var(--navy);
+    font-size: 13px; color: var(--ink-2); line-height: 1.55;
+  }
+  .companion-note b { color: var(--ink); }
+  .companion-note a { color: var(--navy-deep); font-weight: 600; }
+
+  /* --- Section heads --- */
+  section { margin-top: 64px; scroll-margin-top: 24px; }
+  h2 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(24px, 3vw, 32px); line-height: 1.15;
+    letter-spacing: -0.015em; margin: 0 0 8px; text-wrap: balance;
+  }
+  h2 .n {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em;
+    color: var(--corten); margin-right: 14px; vertical-align: middle;
+    text-transform: uppercase; font-weight: 500;
+  }
+  h2 + .h-sub {
+    color: var(--muted); font-size: 15px; margin: 0 0 32px;
+    max-width: 74ch; line-height: 1.55;
+  }
+  h3 {
+    font-family: var(--serif); font-size: 21px; font-weight: 500;
+    line-height: 1.2; margin: 0; letter-spacing: -0.005em;
+  }
+  h4 {
+    font-family: var(--sans); font-size: 13px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink); font-weight: 700;
+    margin: 24px 0 10px;
+  }
+
+  /* --- Reframe callout --- */
+  .reframe {
+    background: var(--panel); border: 1px solid var(--rule); border-radius: 3px;
+    padding: 28px 32px; margin-top: 32px;
+  }
+  .reframe p {
+    font-family: var(--serif); font-size: 17px; line-height: 1.55;
+    color: var(--ink); margin: 0 0 14px;
+  }
+  .reframe p:last-child { margin-bottom: 0; }
+  .reframe b { color: var(--corten-deep); font-weight: 600; }
+
+  /* --- Two-col table (does / does not) --- */
+  .cols-2 {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 28px;
+  }
+  @media (max-width: 760px) { .cols-2 { grid-template-columns: 1fr; } }
+  .col-card {
+    border: 1px solid var(--rule); border-radius: 3px; background: var(--panel);
+    padding: 24px 26px 26px;
+  }
+  .col-card .lbl {
+    font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+    font-weight: 700; margin-bottom: 10px;
+  }
+  .col-card.good .lbl { color: var(--good); }
+  .col-card.bad .lbl { color: var(--bad); }
+  .col-card h3 { font-size: 19px; margin: 0 0 14px; }
+  .col-card ul { padding: 0; margin: 0; list-style: none; font-size: 14px; color: var(--ink-2); line-height: 1.55; }
+  .col-card ul li {
+    padding: 10px 0 10px 24px; border-bottom: 1px solid var(--rule); position: relative;
+  }
+  .col-card ul li:last-child { border-bottom: 0; }
+  .col-card ul li::before {
+    position: absolute; left: 0; top: 10px; font-family: var(--mono);
+    font-size: 12px; letter-spacing: 0.04em; font-weight: 700;
+  }
+  .col-card.good ul li::before { content: "✓"; color: var(--good); }
+  .col-card.bad ul li::before { content: "✕"; color: var(--bad); }
+  .col-card ul li b { color: var(--ink); font-weight: 600; }
+
+  /* --- Reset table (adjusted 4-phase) --- */
+  .reset-wrap {
+    overflow-x: auto; border: 1px solid var(--rule); border-radius: 3px;
+    background: var(--panel); margin-top: 28px;
+  }
+  table.reset {
+    width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 720px;
+  }
+  table.reset th {
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; text-align: left;
+    padding: 16px 18px; border-bottom: 1px solid var(--rule-strong);
+    background: var(--panel-2);
+  }
+  table.reset td {
+    padding: 16px 18px; border-bottom: 1px solid var(--rule);
+    vertical-align: top; line-height: 1.5;
+  }
+  table.reset tr:last-child td { border-bottom: 0; }
+  table.reset td.was { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--rule-strong); font-size: 12.5px; }
+  table.reset td.now { color: var(--ink); font-weight: 500; }
+  table.reset td.why { color: var(--muted); font-size: 13px; }
+  table.reset td.dim { font-weight: 600; color: var(--ink); }
+
+  /* --- Ops model layout card --- */
+  .ops-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 28px;
+  }
+  @media (max-width: 900px) { .ops-grid { grid-template-columns: 1fr; } }
+  .ops-card {
+    border: 1px solid var(--rule); border-radius: 3px; background: var(--panel);
+    padding: 26px 28px 28px; position: relative;
+  }
+  .ops-card .icon-lbl {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--corten-deep); font-weight: 700; margin-bottom: 10px;
+  }
+  .ops-card .icon-lbl .box {
+    width: 22px; height: 22px; border: 1px solid var(--corten);
+    display: grid; place-items: center;
+    font-family: var(--mono); color: var(--corten); font-weight: 700; font-size: 11px;
+  }
+  .ops-card h3 { font-size: 18px; margin: 0 0 10px; }
+  .ops-card p { color: var(--ink-2); font-size: 14px; margin: 0 0 14px; }
+
+  /* --- Code blocks --- */
+  pre {
+    background: var(--code-bg); color: var(--code-fg);
+    border-radius: 3px; padding: 18px 20px;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.55;
+    overflow-x: auto; margin: 12px 0 0;
+    border: 1px solid rgba(0,0,0,0.4);
+  }
+  pre .c { color: var(--code-com); font-style: italic; }
+  pre .k { color: var(--code-key); }
+  pre .s { color: var(--code-str); }
+  pre .n { color: var(--code-num); }
+  pre .h { color: #FFF; font-weight: 600; }
+  code {
+    font-family: var(--mono); font-size: 0.9em;
+    background: var(--panel-2); padding: 1px 5px; border-radius: 2px;
+    border: 1px solid var(--rule);
+  }
+  pre code { background: transparent; padding: 0; border: 0; font-size: inherit; }
+
+  /* --- Phase playbook --- */
+  .weeks {
+    display: grid; gap: 16px; margin-top: 22px;
+  }
+  .week {
+    border: 1px solid var(--rule); border-radius: 3px; background: var(--panel);
+    overflow: hidden;
+  }
+  .week-head {
+    padding: 16px 22px; border-bottom: 1px solid var(--rule);
+    display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+    background: var(--panel-2);
+  }
+  .week-head .wn {
+    font-family: var(--mono); font-size: 11px; color: var(--corten);
+    letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+  }
+  .week-head h3 {
+    display: inline; font-size: 17px; font-family: var(--serif); font-weight: 500;
+  }
+  .week-head .tag {
+    margin-left: auto; font-family: var(--mono); font-size: 10.5px;
+    color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .week-body { padding: 20px 24px 22px; }
+  .week-body p { margin: 0 0 12px; color: var(--ink-2); font-size: 14px; }
+  .week-body .task { font-size: 13.5px; color: var(--muted); margin-top: 10px; }
+  .week-body .task b { color: var(--ink); font-weight: 600; }
+
+  /* --- Timeline strip --- */
+  .timeline {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    margin-top: 28px; border: 1px solid var(--rule); border-radius: 3px;
+    background: var(--panel); overflow: hidden;
+  }
+  @media (max-width: 700px) { .timeline { grid-template-columns: 1fr 1fr; } }
+  .tl-cell {
+    padding: 20px 22px; border-right: 1px solid var(--rule);
+  }
+  .tl-cell:last-child { border-right: 0; }
+  @media (max-width: 700px) {
+    .tl-cell:nth-child(2n) { border-right: 0; }
+    .tl-cell:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
+  }
+  .tl-cell .tn {
+    font-family: var(--mono); font-size: 10.5px; color: var(--corten);
+    letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700;
+  }
+  .tl-cell h4 {
+    font-family: var(--serif); font-size: 17px; font-weight: 500;
+    margin: 6px 0 4px; letter-spacing: -0.005em; text-transform: none; color: var(--ink);
+  }
+  .tl-cell .team {
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    letter-spacing: 0.04em; margin-bottom: 12px;
+  }
+  .tl-cell p { margin: 0; font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+
+  /* --- Anti-patterns --- */
+  .anti-list {
+    margin-top: 24px; display: grid; gap: 12px;
+  }
+  .anti {
+    display: grid; grid-template-columns: 44px 1fr; gap: 16px; align-items: start;
+    padding: 16px 20px; border: 1px solid var(--rule); border-left: 3px solid var(--bad);
+    background: var(--panel); border-radius: 3px;
+  }
+  .anti .no {
+    font-family: var(--mono); font-size: 11px; color: var(--bad); font-weight: 700;
+    letter-spacing: 0.1em; padding-top: 2px;
+  }
+  .anti .body { font-size: 13.5px; color: var(--ink-2); line-height: 1.55; }
+  .anti .body b { color: var(--ink); font-weight: 600; }
+
+  /* --- Footer --- */
+  footer.report-foot {
+    margin-top: 84px; padding-top: 30px; border-top: 1px solid var(--rule);
+    display: flex; justify-content: space-between; align-items: baseline;
+    color: var(--faint); font-size: 12px; letter-spacing: 0.04em;
+    flex-wrap: wrap; gap: 12px;
+  }
+  footer.report-foot .l {
+    font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--muted);
+  }
+  footer.report-foot .r {
+    font-family: var(--mono); text-transform: uppercase;
+    font-size: 10.5px; letter-spacing: 0.14em;
+  }
+
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--corten); outline-offset: 2px; }
+  a { color: var(--navy); text-decoration: none; }
+  a:hover { color: var(--corten); }
+</style>
+
+<div class="page">
+
+  <aside class="rail" aria-label="Contents">
+    <div class="rail-eyebrow">Contents</div>
+    <ol>
+      <li><a href="#reframe">Solo reframe</a></li>
+      <li><a href="#does">What Claude Code does</a></li>
+      <li><a href="#resets">Scope resets by domain</a></li>
+      <li><a href="#ops">Your operating model</a></li>
+      <li><a href="#phase0">Phase 0 playbook</a></li>
+      <li><a href="#phase1">Phase 1 playbook</a></li>
+      <li><a href="#hand">Phase 2 &amp; 3 — where solo ends</a></li>
+      <li><a href="#anti">Anti‑patterns</a></li>
+    </ol>
+  </aside>
+
+  <main>
+
+    <header class="mast">
+      <div class="masthead-row">
+        <div class="brand"><b>Corten Energy</b> &nbsp;·&nbsp; Nervve<sup style="font-size:.6em">™</sup> platform</div>
+        <div class="meta">
+          <span>Doc · Solo build plan</span>
+          <span>Rev 01 · 2026‑08‑06</span>
+        </div>
+      </div>
+      <div class="eyebrow">Founder Playbook</div>
+      <h1>Building the four phases <em>alone</em>, with Claude Code as your only engineering pair.</h1>
+      <p class="kicker">A pragmatic playbook — how to translate the gap‑analysis roadmap into concrete daily work when there is no team, only you and an AI coding agent. Where scope has to shrink, where managed services replace ambitious infrastructure, what to delegate to Claude and what you must never delegate, and the exact first commands to run.</p>
+      <div class="companion-note">
+        <b>Companion doc.</b> This playbook pairs with the <a href="https://claude.ai/code/artifact/3f59aa96-b6d3-4add-95c9-88c1b067843c">gap analysis</a>. That doc says <i>what</i> is missing; this one says <i>how you build it, alone</i>.
+      </div>
+    </header>
+
+    <section id="reframe">
+      <h2><span class="n">§ 01</span> The solo reframe</h2>
+
+      <div class="reframe">
+        <p>The original four‑phase plan assumed 2 – 3 senior engineers, a fractional CISO, and a market‑design lead from month one. You are one person. That fact does not change what Nervve must eventually become, but it does change three things about how you get there.</p>
+        <p><b>Scope shrinks hard.</b> Two consoles instead of three; one pilot counterparty instead of a cohort; a rules‑based dispatcher long before any ML; manual settlement runs before automated payout. Every ambition the founder‑team plan carried gets deferred until it earns its keep.</p>
+        <p><b>Managed services replace ambitious infrastructure.</b> Cloud Run in place of GKE; Firebase Auth in place of KeyCloak; Neon or Supabase in place of self‑managed Cloud SQL; Grafana Cloud in place of a bespoke observability stack. You will outgrow each of these — but "outgrow" is a good problem you get to have because the swap bought you 6+ months.</p>
+        <p><b>Claude Code is a force multiplier, not a substitute team.</b> Well‑scoped it delivers roughly 2 – 3× throughput on engineering that is bounded and reviewable. It does not replace judgement, taste, sales, regulator dialogue, or being the person who is paged at 3am when a real dispatch fails. Your job is to be the architect, product owner, ops lead and sales team; its job is the code.</p>
+      </div>
+    </section>
+
+    <section id="does">
+      <h2><span class="n">§ 02</span> What Claude Code does — and does not do</h2>
+      <p class="h-sub">Solo operators fail with AI coding tools when they over‑trust them on the judgement work and under‑use them on the mechanical work. Draw the line explicitly and it stays useful.</p>
+
+      <div class="cols-2">
+        <div class="col-card good">
+          <div class="lbl">Delegate freely</div>
+          <h3>Mechanical, bounded, reviewable work.</h3>
+          <ul>
+            <li><b>Terraform modules</b> from a written spec (VPC, GKE, Cloud SQL, KMS)</li>
+            <li><b>Boilerplate CRUD services</b> once the domain model is fixed</li>
+            <li><b>Test scaffolding</b> — unit, integration, contract tests from examples</li>
+            <li><b>Cross‑file refactors</b> — renames, extractions, migration sweeps</li>
+            <li><b>Database migrations</b> against a schema you review</li>
+            <li><b>Client SDKs and API adapters</b> from OpenAPI or protobuf</li>
+            <li><b>CI / CD pipelines</b> — GitHub Actions, Cloud Build, Cloud Deploy</li>
+            <li><b>Docs from code</b> — READMEs, ADRs, runbook drafts</li>
+            <li><b>Multi‑file review passes</b> via the <code>/security-review</code> and <code>/simplify</code> skills</li>
+          </ul>
+        </div>
+        <div class="col-card bad">
+          <div class="lbl">Never delegate</div>
+          <h3>Judgement, external trust, accountability.</h3>
+          <ul>
+            <li><b>The domain model.</b> Energy‑market vocabulary is yours to author</li>
+            <li><b>The settlement rulebook.</b> A wrong invoice is a customer you lose</li>
+            <li><b>Regulator conversations.</b> EMA sandbox dialogue is your voice</li>
+            <li><b>Tech‑stack tradeoffs</b> that lock you in for two years</li>
+            <li><b>Security accountability</b> for CII — CCoP obligations name a person</li>
+            <li><b>On‑call at 3am.</b> An AI cannot own a dispatch failure</li>
+            <li><b>First‑customer sales.</b> Trust is bought with a founder's face</li>
+            <li><b>Hiring decisions</b> when the time comes to add a first engineer</li>
+            <li><b>Handling counterparty data or bank details</b> without an audit trail</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="resets">
+      <h2><span class="n">§ 03</span> Scope resets by domain</h2>
+      <p class="h-sub">Every domain from the gap analysis gets a solo swap — the ambitious choice deferred, the managed choice adopted, and a one‑line reason. Nothing here is permanent; each is a bridge you burn later.</p>
+
+      <div class="reset-wrap">
+        <table class="reset">
+          <thead>
+            <tr>
+              <th>Domain</th>
+              <th>Team plan (deferred)</th>
+              <th>Solo swap (adopt now)</th>
+              <th>Why</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="dim">Compute</td>
+              <td class="was">GKE Autopilot with per‑service deployments</td>
+              <td class="now">Cloud Run, one service per repo folder</td>
+              <td class="why">Zero cluster ops. Autoscaling to zero. Native gRPC. Swap later.</td>
+            </tr>
+            <tr>
+              <td class="dim">Identity</td>
+              <td class="was">KeyCloak on GKE with Singpass federation</td>
+              <td class="now">Firebase Auth or Clerk, email + Google</td>
+              <td class="why">No IdP to run. Add federation when the counterparty needs it.</td>
+            </tr>
+            <tr>
+              <td class="dim">OLTP</td>
+              <td class="was">Cloud SQL Postgres with regional HA</td>
+              <td class="now">Neon or Supabase Postgres (Singapore region)</td>
+              <td class="why">Branching for previews, PITR built in, generous free tier.</td>
+            </tr>
+            <tr>
+              <td class="dim">Timeseries</td>
+              <td class="was">Bigtable or self‑managed TimescaleDB</td>
+              <td class="now">Timescale Cloud or InfluxDB Cloud</td>
+              <td class="why">Meter cardinality is not your engineering problem in year one.</td>
+            </tr>
+            <tr>
+              <td class="dim">Streaming</td>
+              <td class="was">Pub/Sub + Dataflow (Beam) end‑to‑end</td>
+              <td class="now">Pub/Sub + a single Cloud Run consumer</td>
+              <td class="why">Beam is a team commitment. One consumer buys you 10× throughput headroom before you need it.</td>
+            </tr>
+            <tr>
+              <td class="dim">Frontend</td>
+              <td class="was">Three consoles: Holder, Buyer, Operator</td>
+              <td class="now">One Operator console. Buyer / Holder as CSV export + email for pilot</td>
+              <td class="why">You are the buyer's account manager. The console can wait.</td>
+            </tr>
+            <tr>
+              <td class="dim">Matching engine</td>
+              <td class="was">Continuous order book with locational awareness</td>
+              <td class="now">Periodic (hourly) call market, single node, single tenant</td>
+              <td class="why">Correctness beats liquidity. Prove clearing arithmetic before latency.</td>
+            </tr>
+            <tr>
+              <td class="dim">Settlement</td>
+              <td class="was">Automated payouts via PSP or bank rails</td>
+              <td class="now">Ledger + invoice PDF; you initiate bank transfers manually</td>
+              <td class="why">Regulatory scope of "holding funds" is a trap. Stay out of it for pilot.</td>
+            </tr>
+            <tr>
+              <td class="dim">Meter ingest</td>
+              <td class="was">SP Group live API for all pilot sites</td>
+              <td class="now">One site's SP data, plus a synthetic‑meter harness for the rest</td>
+              <td class="why">Real data is the bottleneck, not the code path.</td>
+            </tr>
+            <tr>
+              <td class="dim">OT integration</td>
+              <td class="was">IEC 61850, DNP3, IEEE 2030.5, OpenADR</td>
+              <td class="now">HTTPS webhook + signed payload. Pick one protocol only if a real pilot forces it.</td>
+              <td class="why">Every protocol you support is a codebase you own forever.</td>
+            </tr>
+            <tr>
+              <td class="dim">Observability</td>
+              <td class="was">Cloud Ops full suite + custom SLOs</td>
+              <td class="now">Grafana Cloud free tier + Sentry + Cloud Logging</td>
+              <td class="why">Setup takes an afternoon. Enough signal to run a pilot.</td>
+            </tr>
+            <tr>
+              <td class="dim">Cyber</td>
+              <td class="was">CCoP 2.0 alignment from day one with in‑house CISO</td>
+              <td class="now">Fractional CISO (~4 hrs/mo) + written target architecture; hard controls before <b>any</b> live dispatch</td>
+              <td class="why">Build to CCoP even in dev. Retrofitting is the single biggest cost trap.</td>
+            </tr>
+            <tr>
+              <td class="dim">CI / CD</td>
+              <td class="was">Cloud Build + Cloud Deploy + Binary Authorization</td>
+              <td class="now">GitHub Actions → Cloud Run direct; Terraform via <code>tfaction</code></td>
+              <td class="why">Zero moving parts. Add Binary Authorization when a second engineer arrives.</td>
+            </tr>
+            <tr>
+              <td class="dim">Regulatory</td>
+              <td class="was">Dedicated market‑design lead from month one</td>
+              <td class="now">Fractional energy‑policy advisor; you carry EMA conversations personally</td>
+              <td class="why">Regulators trust founders, not middle managers.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="ops">
+      <h2><span class="n">§ 04</span> Your operating model with Claude Code</h2>
+      <p class="h-sub">Solo throughput with an AI pair collapses without a working setup. Six patterns do most of the work — a well‑written <code>CLAUDE.md</code>, plan‑mode discipline, subagents for context hygiene, worktrees for parallel experiments, workflows for fan‑out, and MCP servers to reach your tools.</p>
+
+      <div class="ops-grid">
+
+        <div class="ops-card">
+          <div class="icon-lbl"><div class="box">1</div>CLAUDE.md — your standing instructions</div>
+          <h3>The single most important file in your repo.</h3>
+          <p>Every Claude Code session reads it. It fixes conventions Claude would otherwise drift on, records your stack decisions, and lists the things it must never touch without asking.</p>
+          <pre><span class="c"># Nervve — CLAUDE.md</span>
+
+<span class="h">## Ownership</span>
+Solo founder. No teammates yet. You are my only engineering pair.
+Optimise for: correctness, reviewability, small diffs, working tests.
+
+<span class="h">## Stack</span>
+- Runtime: <span class="k">Node 22 + TypeScript</span>, Cloud Run
+- Data:    <span class="k">Neon Postgres 15</span> via <span class="k">Drizzle</span>
+- Events:  <span class="k">Cloud Pub/Sub</span> with a single consumer per topic
+- Auth:    <span class="k">Firebase Auth</span> (interface abstracts for later swap)
+- Infra:   <span class="k">Terraform</span> (folder = env: dev / staging / prod)
+- CI:      <span class="k">GitHub Actions</span> → Cloud Run deploy on main
+
+<span class="h">## Conventions</span>
+- Every service exposes <span class="s">/health</span> and <span class="s">/ready</span>.
+- Every domain event has a schema in <span class="s">packages/events</span>.
+- Money is int64 cents. Currency codes are ISO 4217.
+- Time is UTC ISO-8601 in code; local only at the edge.
+- Tests: <span class="k">vitest</span> for unit; <span class="k">playwright</span> for e2e.
+
+<span class="h">## Never do without asking</span>
+- Change anything under <span class="s">packages/settlement/rules/</span>
+- Modify Terraform in <span class="s">envs/prod/</span>
+- Delete data or migrations
+- Add a new external SaaS without a written justification
+- Skip tests to make CI green</pre>
+        </div>
+
+        <div class="ops-card">
+          <div class="icon-lbl"><div class="box">2</div>Plan mode — your only code review</div>
+          <h3>Design before you code. Every time.</h3>
+          <p>You have no reviewer. Plan mode is the substitute — Claude drafts the change, you interrogate it, and only then does it execute. This is where architectural errors get caught cheaply.</p>
+          <pre><span class="c"># In an interactive Claude Code session:</span>
+<span class="k">/plan</span> Add the deviation ledger table and the domain events for
+<span class="s">DispatchAcknowledged</span> and <span class="s">DispatchDeviated</span>. The ledger must
+be append-only, indexed by (site_id, window_id, event_time), and
+survive out-of-order inserts. Show the migration, the event schema,
+and the two publisher call-sites before writing anything.</pre>
+          <p style="margin-top:14px;">If the plan is wrong, iterate the plan — not the code. Only exit plan mode when you would sign off on a colleague's proposal.</p>
+        </div>
+
+        <div class="ops-card">
+          <div class="icon-lbl"><div class="box">3</div>Subagents — protect the main context</div>
+          <h3>Search, research and review without polluting your working memory.</h3>
+          <p>The main conversation stays focused on the change you are shipping. Subagents do the digging and return only what you need.</p>
+          <pre><span class="c"># Explore — find where something lives</span>
+Use the <span class="k">Explore</span> agent to locate every callsite of
+<span class="s">SettlementRunFinalised</span> across services.
+
+<span class="c"># Plan — architectural design without touching files</span>
+Use the <span class="k">Plan</span> agent to design the schema for the
+half-hourly meter aggregation, keeping cardinality under
+2M rows/day/site.
+
+<span class="c"># Custom — your own energy-market analyst</span>
+<span class="c"># .claude/agents/market-analyst.md defines the persona</span>
+Use the <span class="k">market-analyst</span> agent to check whether this
+settlement window aligns with EMA's period definitions.</pre>
+        </div>
+
+        <div class="ops-card">
+          <div class="icon-lbl"><div class="box">4</div>Worktrees — try two approaches at once</div>
+          <h3>Parallel experiments without stomping on each other.</h3>
+          <p>When you're not sure how to model something — a matching engine, a dispatch protocol — build both in isolated worktrees, run them side‑by‑side, and keep the winner.</p>
+          <pre><span class="c"># In Claude Code:</span>
+<span class="k">/EnterWorktree</span> match-engine-orderbook
+<span class="c"># build the continuous order-book variant</span>
+
+<span class="k">/EnterWorktree</span> match-engine-callmarket
+<span class="c"># build the periodic call-market variant</span>
+
+<span class="c"># Run both through the same test corpus, keep the</span>
+<span class="c"># winner, discard the worktree of the loser.</span>
+<span class="k">/ExitWorktree</span> match-engine-orderbook <span class="c"># abandon</span></pre>
+        </div>
+
+        <div class="ops-card">
+          <div class="icon-lbl"><div class="box">5</div>Workflows — fan out when the shape allows</div>
+          <h3>Ten agents in parallel, on well‑bounded tasks.</h3>
+          <p>Reviews, migrations, audits, and "same change across N files" work fan out well. Use only when you've explicitly asked for it — workflows spend tokens fast and are not the right tool for exploratory work.</p>
+          <pre><span class="c"># Say "ultracode" or ask for a workflow explicitly:</span>
+Use a workflow to run a <span class="k">CCoP-alignment audit</span> across
+every microservice under <span class="s">services/</span>. For each service,
+one agent checks:
+  - Secrets access patterns
+  - Logging of PII / meter data
+  - Auth middleware present on all routes
+  - TLS + mTLS on outbound calls
+Adversarially verify each finding with a second agent
+before reporting. Fan out; barrier only to dedupe.</pre>
+        </div>
+
+        <div class="ops-card">
+          <div class="icon-lbl"><div class="box">6</div>MCP servers — reach your real tools</div>
+          <h3>Wire Claude Code into GitHub, GCP, Sentry, Notion.</h3>
+          <p>MCP is how Claude Code stops being just a code editor and becomes your operations console. The minimum solo set:</p>
+          <pre><span class="c"># Interactive setup: `/mcp` in Claude Code</span>
+
+<span class="h">github</span>       <span class="c"># PR / issue / CI status without leaving the CLI</span>
+<span class="h">gcp</span>          <span class="c"># deploys, logs, IAM checks</span>
+<span class="h">sentry</span>       <span class="c"># pull the top errors before each deploy</span>
+<span class="h">linear</span>       <span class="c"># or Notion — your single task list</span>
+<span class="h">postgres</span>     <span class="c"># scoped read-only for prod investigation</span>
+
+<span class="c"># Never wire a write-capable MCP to a prod database</span>
+<span class="c"># without a WORM audit trail. Read-only is fine.</span></pre>
+        </div>
+
+      </div>
+
+      <h4 id="hooks">Hooks &amp; skills — the last mile</h4>
+      <p style="font-size:14px;color:var(--ink-2);margin:10px 0 12px;">Two more knobs make the difference between a novelty and a working operating environment. Skills package your repeated workflows into <code>/slash‑commands</code>; hooks enforce guardrails the model cannot skip.</p>
+      <pre><span class="c"># .claude/skills/ — your custom commands</span>
+
+<span class="h">/eod</span>          <span class="c"># "end of day": summarise commits, test state, deploy log, open PRs</span>
+<span class="h">/settle</span>       <span class="c"># run a settlement window and dump the reconciliation report</span>
+<span class="h">/preflight</span>    <span class="c"># pre-deploy: run tests, tf plan, secrets check, changelog check</span>
+<span class="h">/dispatch-drill</span> <span class="c"># fire the synthetic-meter harness and verify the dispatch loop end-to-end</span>
+
+<span class="c"># .claude/settings.json — hooks</span>
+
+<span class="h">SessionStart</span>   <span class="c"># check node/pnpm versions, tf init, gcloud auth</span>
+<span class="h">PostToolUse</span>    <span class="c"># run `pnpm lint --fix` after any Edit or Write</span>
+<span class="h">Stop</span>           <span class="c"># enforce clean git tree before ending the session</span>
+<span class="h">PreToolUse</span>     <span class="c"># block edits under packages/settlement/rules/ without confirm</span></pre>
+    </section>
+
+    <section id="phase0">
+      <h2><span class="n">§ 05</span> Phase 0 — Foundations · weeks 1 – 12</h2>
+      <p class="h-sub">The single goal of Phase 0 is to make the rest of the work possible. You are laying rails: a domain model on paper, a repo you can grow into, cloud infra that Terraform owns, CI/CD that runs on every push, a settlement rulebook that describes the arithmetic before any code renders it, and an EMA conversation opened. No product yet.</p>
+
+      <div class="weeks">
+
+        <div class="week">
+          <div class="week-head">
+            <span class="wn">Week 1 – 2</span>
+            <h3>Repo, CLAUDE.md, first cloud contact</h3>
+            <span class="tag">You + Claude</span>
+          </div>
+          <div class="week-body">
+            <p>Start with the surfaces Claude will lean on for the next 18 months. Get the repo layout right and every session after this one becomes cheaper.</p>
+            <pre><span class="c"># Interactive Claude Code session in a fresh repo:</span>
+
+<span class="k">/init</span>
+<span class="c"># Bootstrap a monorepo with pnpm workspaces:</span>
+<span class="c">#   /apps/operator-console         (React + Vite)</span>
+<span class="c">#   /services/*                    (Cloud Run services)</span>
+<span class="c">#   /packages/events               (event schemas + zod validators)</span>
+<span class="c">#   /packages/domain               (aggregates, value objects)</span>
+<span class="c">#   /packages/settlement           (rulebook, ledger, tests)</span>
+<span class="c">#   /infra                         (Terraform, one folder per env)</span>
+<span class="c">#   /docs/adr                      (architectural decisions)</span>
+<span class="c">#   CLAUDE.md at root, per-package CLAUDE.md where useful</span>
+
+<span class="k">/plan</span> A Terraform baseline for GCP in ap-southeast-1:
+  - Private VPC, two subnets
+  - Cloud Run enabled, Artifact Registry, Cloud KMS
+  - Neon Postgres (external) connected via Cloud Run VPC connector
+  - Secret Manager for all env config
+  - Cloud Logging → BigQuery sink
+  - IAM: three service accounts (dev, staging, prod), least-privilege
+Output modular, apply incrementally, no click-ops.</pre>
+            <p class="task"><b>By end of week 2:</b> you can <code>terraform apply</code> a dev environment from a clean laptop, and <code>pnpm dev</code> boots a "hello world" Cloud Run service against Neon.</p>
+          </div>
+        </div>
+
+        <div class="week">
+          <div class="week-head">
+            <span class="wn">Week 3 – 4</span>
+            <h3>Domain model &amp; event catalogue — on paper</h3>
+            <span class="tag">You lead · Claude drafts</span>
+          </div>
+          <div class="week-body">
+            <p>This is the highest‑leverage work you will do all year. Get this wrong and everything downstream is expensive to fix. Do not let Claude author it — let it help you structure it.</p>
+            <pre><span class="c"># Use the Plan agent for pure design (no file writes):</span>
+
+Use the <span class="k">Plan</span> agent to do an event-storming pass for a
+two-sided grid-capacity marketplace. Identify:
+
+  1. Aggregates (Counterparty, Site, Meter, Offer, Bid,
+     Allocation, DispatchSignal, DeviationEntry, SettlementRun)
+  2. Domain events per aggregate (past-tense, immutable facts)
+  3. Command flows (who commands what, from where)
+  4. Bounded contexts and where they seam
+
+Return an ADR (docs/adr/0001-domain-model.md) and a Mermaid
+diagram of the event flow. Do NOT write code.</pre>
+            <p class="task"><b>By end of week 4:</b> ADR 0001 signed off by you and your energy‑policy advisor. Every aggregate has a name that means the same thing to an energy person and an engineer.</p>
+          </div>
+        </div>
+
+        <div class="week">
+          <div class="week-head">
+            <span class="wn">Week 5 – 6</span>
+            <h3>Settlement rulebook — on paper, then in tests</h3>
+            <span class="tag">You author · Claude tests</span>
+          </div>
+          <div class="week-body">
+            <p>The rulebook is a Markdown document that describes how allocations become invoices, how deviations are penalised, how netting works, how disputes are resolved. Write it. Then have Claude translate it into a test corpus that will run for the life of the platform.</p>
+            <pre><span class="c"># After you've drafted docs/settlement-rulebook.md:</span>
+
+<span class="k">/plan</span> Read <span class="s">docs/settlement-rulebook.md</span>. For every
+numbered rule, generate:
+
+  - A pure function in <span class="s">packages/settlement/rules/</span>
+    that implements it (int64 cents, no floats)
+  - A property-based test (fast-check) covering the rule
+  - A golden-file test with 3 - 5 hand-worked examples
+    I will review before you commit
+
+Do NOT invent rules. If a rule is ambiguous, list it
+in <span class="s">docs/settlement-open-questions.md</span> and stop.</pre>
+            <p class="task"><b>By end of week 6:</b> the rulebook is executable. You can hand it to a counterparty CFO and they can trace the arithmetic on a napkin.</p>
+          </div>
+        </div>
+
+        <div class="week">
+          <div class="week-head">
+            <span class="wn">Week 7 – 8</span>
+            <h3>CI, security baseline, secrets discipline</h3>
+            <span class="tag">Claude‑led</span>
+          </div>
+          <div class="week-body">
+            <p>Every push runs the whole pipeline. Every commit is deployable. Every secret lives in Secret Manager. No exceptions, ever — solo founders die of shortcuts that only cost once.</p>
+            <pre><span class="k">/plan</span> Write a GitHub Actions pipeline that on every push:
+
+  1. Restores pnpm cache
+  2. Runs <span class="s">lint / typecheck / test</span> across the workspace
+  3. Runs <span class="s">tf plan</span> on any changed env folder
+  4. Builds and pushes containers for changed services to
+     Artifact Registry, tagged with the commit SHA
+  5. On main: deploys to Cloud Run dev with the new tag
+  6. Posts a PR comment with the tf plan diff and coverage
+
+Then add a <span class="k">SessionStart</span> hook that fails a Claude
+session if <span class="s">git status</span> is dirty or if any file
+under <span class="s">infra/envs/prod</span> was edited without a
+matching ADR in <span class="s">docs/adr/</span>.</pre>
+            <p class="task"><b>By end of week 8:</b> you cannot ship a commit without lint, test, tf plan, and deploy‑to‑dev all going green. If any of those hurt, fix the tooling, not the discipline.</p>
+          </div>
+        </div>
+
+        <div class="week">
+          <div class="week-head">
+            <span class="wn">Week 9 – 10</span>
+            <h3>CCoP target document · fractional CISO onboarded</h3>
+            <span class="tag">You + external</span>
+          </div>
+          <div class="week-body">
+            <p>You do not need a running SIEM in Phase 0. You do need a written target‑state security architecture that a CCoP auditor could nod at. Retain a fractional CISO for ~4 hours a month to co‑author it and to sign off major decisions.</p>
+            <pre><span class="c"># Ask Claude to draft the skeleton before your first</span>
+<span class="c"># CISO session, so you're editing rather than authoring:</span>
+
+<span class="k">/plan</span> Draft <span class="s">docs/security/target-architecture.md</span> covering:
+
+  - Asset inventory (services, data stores, secrets, IdPs)
+  - Trust boundaries (public / private / OT)
+  - Data classification (public, internal, meter, settlement, PII)
+  - Encryption in transit and at rest (algorithms, key custody)
+  - Identity, MFA, session, audit logging
+  - Backup, DR, RPO / RTO targets
+  - Incident response — first-hour runbook
+  - CCoP 2.0 (Energy) control mapping — grid of controls
+    with "have / partial / gap" status
+
+Populate what our current infra supports. Mark everything
+else as GAP with a proposed control.</pre>
+            <p class="task"><b>By end of week 10:</b> a real document exists. Your CISO has signed it. You are building the system it describes, not one Anyone will have to retrofit later.</p>
+          </div>
+        </div>
+
+        <div class="week">
+          <div class="week-head">
+            <span class="wn">Week 11 – 12</span>
+            <h3>EMA sandbox conversation opened · Phase 0 close‑out</h3>
+            <span class="tag">You alone</span>
+          </div>
+          <div class="week-body">
+            <p>Regulator conversations are your job — no AI can carry them. Have your first structured EMA sandbox meeting on the calendar before Phase 0 ends. Turn up with the domain model, the rulebook, and the security target — three artefacts most sandbox applicants do not bring.</p>
+            <pre><span class="c"># Wrap-up automation you'll thank yourself for later:</span>
+
+Create a <span class="k">/eod</span> skill that at end of every working day emits:
+  - Commits shipped since last EOD
+  - Test / coverage delta
+  - Open PRs and their CI state
+  - Deploy versions across dev / staging
+  - Any file under <span class="s">packages/settlement/rules/</span> touched today
+  - Any TODO added today
+
+Pipe the output to a daily Notion page via the Notion MCP.</pre>
+            <p class="task"><b>Phase 0 done when:</b> the repo runs, CI ships to dev on every push, the domain and settlement docs are signed off, a fractional CISO is retained, and an EMA sandbox slot is on your calendar.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="phase1">
+      <h2><span class="n">§ 06</span> Phase 1 — Closed pilot · months 3 – 12</h2>
+      <p class="h-sub">One counterparty. One console. A rules‑based dispatcher. Manual settlement. The goal is a single successful trade end‑to‑end — offer, match, dispatch, measure, settle, invoice — witnessed by two humans on the counterparty side and yourself. Everything else is a distraction.</p>
+
+      <div class="weeks">
+
+        <div class="week">
+          <div class="week-head"><span class="wn">Month 3 – 4</span><h3>Operator console · order book v1</h3><span class="tag">Claude‑heavy</span></div>
+          <div class="week-body">
+            <p>One console, three screens: order book (offers and bids), allocations, and dispatch log. No auth mystery — Firebase Auth, email login, one operator (you). Persistence is the boring Postgres of Phase 0.</p>
+            <pre><span class="k">/plan</span> Build <span class="s">apps/operator-console</span> as a React + Vite SPA
+served by Cloud Run, protected by Firebase Auth.
+
+Three routes:
+  <span class="s">/book</span>         — live offers &amp; bids, WebSocket updates
+  <span class="s">/allocations</span>  — cleared allocations per window
+  <span class="s">/dispatch</span>     — signal history, ack state, deviation ledger
+
+State: server-owned, no client cache beyond React Query.
+Design system: shadcn/ui, minimal palette from the marketing site.
+Ship behind <span class="s">operator.dev.nervve.io</span>.</pre>
+            <p class="task"><b>End of month 4:</b> you can place a manual offer and bid, watch them match, and see the allocation in the console.</p>
+          </div>
+        </div>
+
+        <div class="week">
+          <div class="week-head"><span class="wn">Month 5 – 6</span><h3>Meter ingest · synthetic harness · dispatch loop</h3><span class="tag">Claude + you</span></div>
+          <div class="week-body">
+            <p>You need two ingest paths and one dispatch path. Build the synthetic one first — it is the safety net for every future test — then wire the real one to a single site.</p>
+            <pre><span class="k">/plan</span> A synthetic-meter harness under <span class="s">services/harness</span>:
+  - Generates realistic half-hourly meter data
+  - Publishes to Pub/Sub topic <span class="s">meter.reading</span>
+  - Configurable: site count, sample rate, noise, gaps
+  - CLI: <span class="s">pnpm harness --sites 5 --rate 5m --hours 24</span>
+
+Then <span class="s">services/dispatch</span>:
+  - Consumes <span class="s">allocation.finalised</span>
+  - Emits <span class="s">dispatch.signal</span> to a per-site channel
+  - Waits for ack or times out (60s)
+  - Writes to <span class="s">deviation_ledger</span> if ack fails or measured
+    delivery is outside tolerance
+
+E2E test: harness → match → dispatch → measure → ledger,
+using Playwright to drive the console.</pre>
+            <p class="task"><b>End of month 6:</b> the whole loop runs unattended on dev. You can leave it for an hour and come back to a full deviation ledger for the day's synthetic sites.</p>
+          </div>
+        </div>
+
+        <div class="week">
+          <div class="week-head"><span class="wn">Month 7 – 8</span><h3>Real meter for one site · SP Group path proven</h3><span class="tag">You lead externally</span></div>
+          <div class="week-body">
+            <p>The SP Group meter‑data authorisation path is not an engineering problem; it is a paperwork problem. Do the paperwork. Get one site's half‑hourly data flowing through the same Pub/Sub topic the harness uses, so the rest of the platform cannot tell the difference.</p>
+          </div>
+        </div>
+
+        <div class="week">
+          <div class="week-head"><span class="wn">Month 9 – 10</span><h3>Settlement run · manual payout · first real trade</h3><span class="tag">You + counterparty</span></div>
+          <div class="week-body">
+            <p>Run the settlement window against real meter data, generate the invoice PDF, hand it to the counterparty CFO, receive payment by bank transfer, reconcile in the ledger. This is your first real trade. Screenshot everything — you will pitch investors with it.</p>
+            <pre><span class="k">/settle</span> --window 2026-11-01T00:00Z/2026-11-30T23:30Z
+
+<span class="c"># Reads meter data, allocations, deviations from the</span>
+<span class="c"># window. Applies the rulebook. Generates:</span>
+<span class="c">#   - reports/2026-11.reconciliation.md</span>
+<span class="c">#   - invoices/*.pdf (one per counterparty pair)</span>
+<span class="c">#   - ledger entries (double-entry, WORM)</span>
+<span class="c"># Refuses to run if any deviation is unresolved.</span></pre>
+          </div>
+        </div>
+
+        <div class="week">
+          <div class="week-head"><span class="wn">Month 11 – 12</span><h3>Second counterparty · pilot readiness review</h3><span class="tag">You + fractional CISO</span></div>
+          <div class="week-body">
+            <p>Second counterparty is the moment "one‑off" becomes "product". Also the moment your Phase 0 security document gets its first real audit — walk it with your fractional CISO, close the gaps that turned out to matter, and record what you deferred and why.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="hand">
+      <h2><span class="n">§ 07</span> Phases 2 &amp; 3 — where solo ends</h2>
+      <p class="h-sub">There is no version of Phase 2 you run alone. Regulated pilots, 24×7 dispatch, third‑party attestation and automated payout rails all require humans other than you. The playbook here is not code — it is the shape of the small team you'll assemble, and what Claude Code keeps doing while they arrive.</p>
+
+      <div class="timeline">
+        <div class="tl-cell">
+          <div class="tn">Phase 2 · Month 12</div>
+          <h4>First engineer</h4>
+          <div class="team">You + 1</div>
+          <p>Backend generalist who can own the dispatcher and take the pager. Their onboarding artefact is <code>CLAUDE.md</code> + the ADR log — both were written for humans as much as for AI.</p>
+        </div>
+        <div class="tl-cell">
+          <div class="tn">Phase 2 · Month 14</div>
+          <h4>Retained SOC</h4>
+          <div class="team">+ external</div>
+          <p>A managed detection &amp; response provider (in‑region, Singapore) begins ingesting your logs. Third‑party attestation of the CCoP target document starts.</p>
+        </div>
+        <div class="tl-cell">
+          <div class="tn">Phase 2 · Month 16</div>
+          <h4>Market‑design lead</h4>
+          <div class="team">+ 1 senior</div>
+          <p>You stop carrying EMA conversations alone. Fractional advisor becomes full‑time if the sandbox conversation graduates.</p>
+        </div>
+        <div class="tl-cell">
+          <div class="tn">Phase 3 · Month 18+</div>
+          <h4>SRE + full team</h4>
+          <div class="team">+ 3 – 5</div>
+          <p>On‑call rota, second APAC market, ISO 27001 / SOC 2 preparation. Claude Code stays — it is now every engineer's pair, not just yours.</p>
+        </div>
+      </div>
+
+      <p style="margin-top:26px;color:var(--ink-2);font-size:14px;max-width:74ch;">Between now and month 12, Claude Code's job is to keep you shipping while you talk to regulators, counterparties, and the CISO. Every hour of your time saved on scaffolding is an hour that can go to the conversations only you can carry.</p>
+    </section>
+
+    <section id="anti">
+      <h2><span class="n">§ 08</span> Anti‑patterns to avoid</h2>
+      <p class="h-sub">Five ways solo founders using AI heavily burn themselves. Each is easy to fall into, expensive to escape.</p>
+
+      <div class="anti-list">
+        <div class="anti">
+          <div class="no">01</div>
+          <div class="body"><b>Letting Claude choose the stack.</b> If you cannot articulate why Cloud Run over GKE, Neon over Cloud SQL, Drizzle over Prisma — you will re‑litigate the decision every three months. Own the choice, write it into an ADR, and move on.</div>
+        </div>
+        <div class="anti">
+          <div class="no">02</div>
+          <div class="body"><b>Skipping tests because "Claude will catch it."</b> Claude cannot catch what it has no reason to run. Tests are your only proof that today's Claude and last month's Claude agree on what the code should do. Solo means tests are non‑negotiable.</div>
+        </div>
+        <div class="anti">
+          <div class="no">03</div>
+          <div class="body"><b>Writing settlement code without a written rulebook.</b> The rulebook is Markdown you can hand to a lawyer or a CFO. The code is a rendering of it. If the code came first, you are one dispute away from re‑implementing everything.</div>
+        </div>
+        <div class="anti">
+          <div class="no">04</div>
+          <div class="body"><b>Standing up self‑hosted infrastructure "because it's cheaper."</b> A self‑hosted KeyCloak or Kafka cluster is a full‑time job you don't have. Every hour you spend on it is an hour not spent on customers or the rulebook. Managed services are your compensation for having no ops team.</div>
+        </div>
+        <div class="anti">
+          <div class="no">05</div>
+          <div class="body"><b>Deferring the fractional CISO until you have a product.</b> CCoP is a regime you build into or retrofit into. Retrofit costs 3 – 5× build‑in cost, and the retrofit conversation with an EMA sandbox lead is the wrong first impression to make.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="report-foot">
+      <div class="l">Prepared for Corten Energy — solo build plan for the Nervve platform with Claude Code.</div>
+      <div class="r">Rev 01 · 2026‑08‑06</div>
+    </footer>
+
+  </main>
+
+</div>

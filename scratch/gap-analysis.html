@@ -1,0 +1,1613 @@
+<title>Nervve platform — gap analysis</title>
+<meta name="description" content="A solutions-architect gap analysis: current state of the Nervve platform vs. a mature, live, production-grade grid-capacity marketplace." />
+
+<style>
+  :root {
+    /* Warm neutral ground, sampled to sit next to Corten's navy-and-orange without shouting */
+    --ground: #F7F4EE;
+    --ground-2: #EFEAE0;
+    --panel: #FFFFFF;
+    --panel-2: #F3EEE4;
+    --rule: #DFD7C7;
+    --rule-strong: #C7BDA8;
+
+    --ink: #0F1631;
+    --ink-2: #2C3554;
+    --muted: #6B7391;
+    --faint: #96998F;
+
+    --navy: #27396B;
+    --navy-deep: #1B274C;
+    --corten: #EC7525;
+    --corten-deep: #C85F17;
+    --corten-wash: rgba(236, 117, 37, 0.10);
+    --navy-wash: rgba(39, 57, 107, 0.08);
+
+    /* Severity ramp — deliberately separate from the accent hue */
+    --sev-critical: #B0342B;
+    --sev-critical-tint: #F5D9D5;
+    --sev-high: #D96A1F;
+    --sev-high-tint: #F9DFC8;
+    --sev-medium: #B58729;
+    --sev-medium-tint: #F3E4BE;
+    --sev-low: #4F7A5E;
+    --sev-low-tint: #D4E2D5;
+    --sev-none: #C7BDA8;
+
+    --serif: Iowan Old Style, "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+    --maxw: 1180px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #0C1124;
+      --ground-2: #0F1631;
+      --panel: #141B36;
+      --panel-2: #1A2244;
+      --rule: #2A3358;
+      --rule-strong: #3A4675;
+
+      --ink: #EEF1F7;
+      --ink-2: #C6CCE0;
+      --muted: #9AA6C2;
+      --faint: #64718F;
+
+      --navy: #6A82C7;
+      --navy-deep: #4A5FA0;
+      --corten: #F4A65A;
+      --corten-deep: #EC7525;
+      --corten-wash: rgba(244, 166, 90, 0.12);
+      --navy-wash: rgba(106, 130, 199, 0.10);
+
+      --sev-critical: #E36457;
+      --sev-critical-tint: rgba(227, 100, 87, 0.16);
+      --sev-high: #F0894B;
+      --sev-high-tint: rgba(240, 137, 75, 0.16);
+      --sev-medium: #E0B04B;
+      --sev-medium-tint: rgba(224, 176, 75, 0.16);
+      --sev-low: #7DAF8D;
+      --sev-low-tint: rgba(125, 175, 141, 0.16);
+      --sev-none: #3A4675;
+    }
+  }
+
+  :root[data-theme="light"] {
+    --ground: #F7F4EE;
+    --ground-2: #EFEAE0;
+    --panel: #FFFFFF;
+    --panel-2: #F3EEE4;
+    --rule: #DFD7C7;
+    --rule-strong: #C7BDA8;
+    --ink: #0F1631;
+    --ink-2: #2C3554;
+    --muted: #6B7391;
+    --faint: #96998F;
+    --navy: #27396B;
+    --navy-deep: #1B274C;
+    --corten: #EC7525;
+    --corten-deep: #C85F17;
+    --corten-wash: rgba(236, 117, 37, 0.10);
+    --navy-wash: rgba(39, 57, 107, 0.08);
+    --sev-critical: #B0342B;
+    --sev-critical-tint: #F5D9D5;
+    --sev-high: #D96A1F;
+    --sev-high-tint: #F9DFC8;
+    --sev-medium: #B58729;
+    --sev-medium-tint: #F3E4BE;
+    --sev-low: #4F7A5E;
+    --sev-low-tint: #D4E2D5;
+    --sev-none: #C7BDA8;
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0C1124;
+    --ground-2: #0F1631;
+    --panel: #141B36;
+    --panel-2: #1A2244;
+    --rule: #2A3358;
+    --rule-strong: #3A4675;
+    --ink: #EEF1F7;
+    --ink-2: #C6CCE0;
+    --muted: #9AA6C2;
+    --faint: #64718F;
+    --navy: #6A82C7;
+    --navy-deep: #4A5FA0;
+    --corten: #F4A65A;
+    --corten-deep: #EC7525;
+    --corten-wash: rgba(244, 166, 90, 0.12);
+    --navy-wash: rgba(106, 130, 199, 0.10);
+    --sev-critical: #E36457;
+    --sev-critical-tint: rgba(227, 100, 87, 0.16);
+    --sev-high: #F0894B;
+    --sev-high-tint: rgba(240, 137, 75, 0.16);
+    --sev-medium: #E0B04B;
+    --sev-medium-tint: rgba(224, 176, 75, 0.16);
+    --sev-low: #7DAF8D;
+    --sev-low-tint: rgba(125, 175, 141, 0.16);
+    --sev-none: #3A4675;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  .page {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 56px 32px 96px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  @media (min-width: 1000px) {
+    .page {
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 48px;
+    }
+  }
+
+  /* --- Sidebar TOC --- */
+  aside.rail {
+    display: none;
+  }
+  @media (min-width: 1000px) {
+    aside.rail {
+      display: block;
+      position: sticky;
+      top: 40px;
+      align-self: start;
+      padding: 4px 0;
+      border-right: 1px solid var(--rule);
+      padding-right: 20px;
+    }
+    aside.rail .rail-eyebrow {
+      font-family: var(--sans);
+      font-size: 10.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+    aside.rail ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      counter-reset: rl;
+    }
+    aside.rail li {
+      counter-increment: rl;
+      font-size: 12.5px;
+      line-height: 1.35;
+      margin-bottom: 10px;
+      color: var(--muted);
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+    aside.rail li::before {
+      content: counter(rl, decimal-leading-zero);
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--faint);
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+    aside.rail a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    aside.rail a:hover { color: var(--corten); }
+  }
+
+  main { min-width: 0; }
+
+  /* --- Masthead --- */
+  header.mast {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+  }
+  .masthead-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .brand {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+  }
+  .brand b {
+    font-style: normal;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+    text-transform: uppercase;
+  }
+  .meta span + span { margin-left: 18px; }
+
+  header.mast .eyebrow {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--corten);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  header.mast h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(30px, 4.6vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    margin: 0 0 18px;
+    text-wrap: balance;
+    max-width: 24ch;
+    color: var(--ink);
+  }
+  header.mast h1 em {
+    font-style: italic;
+    color: var(--navy);
+  }
+  header.mast .kicker {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 68ch;
+    margin: 0;
+  }
+
+  /* --- Scope note --- */
+  .scope-note {
+    border: 1px solid var(--rule);
+    background: var(--panel-2);
+    border-left: 3px solid var(--corten);
+    padding: 20px 24px;
+    margin: 40px 0;
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+  .scope-note b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .scope-note .lbl {
+    font-family: var(--sans);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--corten-deep);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* --- Section heads --- */
+  section { margin-top: 64px; scroll-margin-top: 24px; }
+  h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin: 0 0 8px;
+    text-wrap: balance;
+  }
+  h2 .n {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--corten);
+    margin-right: 14px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  h2 + .h-sub {
+    color: var(--muted);
+    font-size: 15px;
+    margin: 0 0 32px;
+    max-width: 74ch;
+    line-height: 1.55;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+  }
+
+  /* --- Executive summary bar --- */
+  .exec {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 28px 32px;
+    margin-top: 32px;
+  }
+  .exec p {
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0 0 26px;
+  }
+  .exec p b { color: var(--corten-deep); font-weight: 600; }
+
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--rule);
+    padding-top: 22px;
+    gap: 0;
+  }
+  @media (max-width: 720px) {
+    .stat-strip { grid-template-columns: repeat(2, 1fr); row-gap: 22px; }
+  }
+  .stat {
+    padding: 0 20px;
+    border-left: 1px solid var(--rule);
+  }
+  .stat:first-child { border-left: 0; padding-left: 0; }
+  .stat .n {
+    font-family: var(--serif);
+    font-size: 38px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .stat.crit .n { color: var(--sev-critical); }
+  .stat.high .n { color: var(--sev-high); }
+  .stat.med .n { color: var(--sev-medium); }
+  .stat.low .n { color: var(--sev-low); }
+  .stat .lbl {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 10px;
+    font-weight: 600;
+  }
+  .stat .sub {
+    font-size: 12.5px;
+    color: var(--faint);
+    margin-top: 4px;
+  }
+
+  /* --- Matrix table --- */
+  .matrix-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: var(--panel);
+  }
+  table.matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    min-width: 720px;
+  }
+  table.matrix th {
+    font-family: var(--sans);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    text-align: left;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--rule-strong);
+    background: var(--panel-2);
+  }
+  table.matrix td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  table.matrix tr:last-child td { border-bottom: 0; }
+  table.matrix tr:hover td { background: var(--corten-wash); }
+  table.matrix td.dim {
+    font-weight: 600;
+    color: var(--ink);
+    width: 24%;
+  }
+  table.matrix td.state { color: var(--muted); width: 32%; font-size: 13px; }
+  table.matrix td.sev-cell { width: 20%; }
+
+  /* Severity chip */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .chip.critical { background: var(--sev-critical-tint); color: var(--sev-critical); }
+  .chip.high { background: var(--sev-high-tint); color: var(--sev-high); }
+  .chip.medium { background: var(--sev-medium-tint); color: var(--sev-medium); }
+  .chip.low { background: var(--sev-low-tint); color: var(--sev-low); }
+  .chip::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* --- Category cards --- */
+  .cat-list {
+    display: grid;
+    gap: 22px;
+    margin-top: 28px;
+  }
+  .cat {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .cat .strip {
+    height: 3px;
+    background: var(--sev-none);
+  }
+  .cat.critical .strip { background: var(--sev-critical); }
+  .cat.high .strip { background: var(--sev-high); }
+  .cat.medium .strip { background: var(--sev-medium); }
+  .cat.low .strip { background: var(--sev-low); }
+
+  .cat-head {
+    padding: 24px 28px 18px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--rule);
+  }
+  .cat-head .num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--faint);
+    margin-right: 12px;
+    vertical-align: middle;
+    font-weight: 500;
+  }
+  .cat-head h3 {
+    display: inline;
+    font-size: 20px;
+  }
+
+  .cat-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  @media (max-width: 720px) {
+    .cat-body { grid-template-columns: 1fr; }
+  }
+
+  .col {
+    padding: 22px 28px 24px;
+  }
+  .col.current { background: var(--corten-wash); border-right: 1px solid var(--rule); }
+  .col.target { background: var(--navy-wash); }
+  @media (max-width: 720px) {
+    .col.current { border-right: 0; border-bottom: 1px solid var(--rule); }
+  }
+  .col .col-lbl {
+    font-family: var(--sans);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .col.current .col-lbl { color: var(--corten-deep); }
+  .col.target .col-lbl { color: var(--navy); }
+  .col p {
+    margin: 0 0 12px;
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .col ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13.5px;
+    color: var(--ink-2);
+  }
+  .col ul li {
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .col ul li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  .cat-foot {
+    padding: 18px 28px 22px;
+    background: var(--panel-2);
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 720px) {
+    .cat-foot { grid-template-columns: 1fr; }
+  }
+  .next-step {
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .next-step .lbl {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--faint);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .next-step b { color: var(--ink); font-weight: 600; }
+
+  /* Severity meter (mini bar) */
+  .meter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+  .meter .blocks {
+    display: flex;
+    gap: 3px;
+  }
+  .meter .b {
+    width: 10px;
+    height: 20px;
+    background: var(--rule);
+    border-radius: 1px;
+  }
+  .cat.critical .meter .b:nth-child(-n+4) { background: var(--sev-critical); }
+  .cat.high .meter .b:nth-child(-n+3) { background: var(--sev-high); }
+  .cat.medium .meter .b:nth-child(-n+2) { background: var(--sev-medium); }
+  .cat.low .meter .b:nth-child(-n+1) { background: var(--sev-low); }
+  .meter .lbl {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  /* --- Timeline / sequencing --- */
+  .phases {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 28px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--panel);
+  }
+  @media (max-width: 900px) { .phases { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .phases { grid-template-columns: 1fr; } }
+  .phase {
+    padding: 24px 22px;
+    border-right: 1px solid var(--rule);
+    position: relative;
+  }
+  .phase:last-child { border-right: 0; }
+  @media (max-width: 900px) {
+    .phase:nth-child(2n) { border-right: 0; }
+    .phase:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
+  }
+  @media (max-width: 520px) {
+    .phase { border-right: 0; border-bottom: 1px solid var(--rule); }
+    .phase:last-child { border-bottom: 0; }
+  }
+  .phase .p-n {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: var(--corten);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .phase h4 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 4px;
+    letter-spacing: -0.005em;
+  }
+  .phase .p-when {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    letter-spacing: 0.02em;
+  }
+  .phase ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  .phase ul li {
+    padding-left: 14px;
+    position: relative;
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .phase ul li::before {
+    content: "›";
+    position: absolute;
+    left: 0;
+    top: -1px;
+    color: var(--corten);
+    font-weight: 700;
+    font-family: var(--mono);
+  }
+
+  /* --- Pyxis-vs-Nervve delta --- */
+  .delta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-top: 28px;
+  }
+  @media (max-width: 720px) { .delta { grid-template-columns: 1fr; } }
+  .delta-card {
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 26px 26px 28px;
+    background: var(--panel);
+  }
+  .delta-card .lbl {
+    font-family: var(--sans);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .delta-card.same .lbl { color: var(--sev-low); }
+  .delta-card.new .lbl { color: var(--corten-deep); }
+  .delta-card h3 {
+    font-size: 19px;
+    margin: 0 0 14px;
+  }
+  .delta-card ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .delta-card ul li {
+    padding: 10px 0 10px 22px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .delta-card ul li:last-child { border-bottom: 0; }
+  .delta-card ul li::before {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+  }
+  .delta-card.same ul li::before { content: "="; color: var(--sev-low); }
+  .delta-card.new ul li::before { content: "+"; color: var(--corten); }
+  .delta-card ul li b { color: var(--ink); font-weight: 600; }
+
+  /* --- Footer --- */
+  footer.report-foot {
+    margin-top: 84px;
+    padding-top: 30px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    color: var(--faint);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  footer.report-foot .l {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer.report-foot .r {
+    font-family: var(--mono);
+    text-transform: uppercase;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+  }
+
+  /* Reduced motion — nothing animates aggressively but honor it anyway */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  /* Focus states */
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--corten);
+    outline-offset: 2px;
+  }
+
+  a { color: var(--navy); text-decoration: none; }
+  a:hover { color: var(--corten); }
+
+  code, .mono { font-family: var(--mono); font-size: 0.92em; }
+</style>
+
+<div class="page">
+
+  <aside class="rail" aria-label="Contents">
+    <div class="rail-eyebrow">Contents</div>
+    <ol>
+      <li><a href="#exec">Executive summary</a></li>
+      <li><a href="#scope">Method &amp; scope</a></li>
+      <li><a href="#matrix">Gap matrix</a></li>
+      <li><a href="#detail">Category detail</a></li>
+      <li><a href="#delta">Vs. Pyxis reference</a></li>
+      <li><a href="#roadmap">Sequenced roadmap</a></li>
+      <li><a href="#economics">Team &amp; economics</a></li>
+    </ol>
+  </aside>
+
+  <main>
+
+    <header class="mast">
+      <div class="masthead-row">
+        <div class="brand"><b>Corten Energy</b> &nbsp;·&nbsp; Nervve<sup style="font-size:.6em">™</sup> platform</div>
+        <div class="meta">
+          <span>Doc · Gap analysis</span>
+          <span>Rev 01 · 2026‑08‑06</span>
+        </div>
+      </div>
+      <div class="eyebrow">Solutions Architecture</div>
+      <h1>From marketing site to <em>market operator</em>: what stands between today and a live, regulated grid‑capacity platform.</h1>
+      <p class="kicker">A structured assessment of the Nervve platform's current state against a mature, production‑grade reference — benchmarked to the Pyxis GCP architecture the founders used before, and extended with the demands specific to a two‑sided grid marketplace: OT integration, real‑time dispatch, financial settlement, and CII‑grade cyber posture in Singapore.</p>
+    </header>
+
+    <section id="exec">
+      <h2><span class="n">§ 01</span> Executive summary</h2>
+
+      <div class="exec">
+        <p>The <code>corten</code> repository currently contains a well‑crafted <b>marketing website</b> and nothing more — no backend, no data ingest, no matching engine, no settlement, no authentication, no observability, no infrastructure‑as‑code. The site accurately describes what Nervve will be; the platform that would deliver those promises does not exist in this codebase. Against a mature live reference, <b>~13 of 14 platform domains</b> require net‑new build. The Pyxis architecture is a reasonable spine to reuse — but a grid‑capacity marketplace layers on four dimensions Pyxis did not need: OT/telemetry ingest, real‑time dispatch, financial‑grade settlement, and CII‑tier cyber governance.</p>
+
+        <div class="stat-strip">
+          <div class="stat crit">
+            <div class="n">9</div>
+            <div class="lbl">Critical gaps</div>
+            <div class="sub">Block go‑live</div>
+          </div>
+          <div class="stat high">
+            <div class="n">4</div>
+            <div class="lbl">High gaps</div>
+            <div class="sub">Block regulator trust</div>
+          </div>
+          <div class="stat med">
+            <div class="n">1</div>
+            <div class="lbl">Medium gaps</div>
+            <div class="sub">Block scale</div>
+          </div>
+          <div class="stat low">
+            <div class="n">1</div>
+            <div class="lbl">Started</div>
+            <div class="sub">Marketing site only</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scope">
+      <h2><span class="n">§ 02</span> Method &amp; scope</h2>
+      <p class="h-sub">What was inspected, and what "current state" and "target state" mean in this document.</p>
+
+      <div class="scope-note">
+        <span class="lbl">Scope caveat</span>
+        <b>Current state</b> is derived exclusively from the <code>freshoakinv-pro/corten</code> repository — two HTML files, one SVG logo, one favicon. If Nervve platform code exists in another repository or environment (a Flutter mobile app, a Node/Java backend, Terraform in a private repo, an existing GKE cluster), it was not visible during this assessment, and gaps below should be re‑graded once that surface is disclosed. <b>Target state</b> is what a live, regulated, revenue‑generating grid‑capacity marketplace needs to operate against Singapore's EMA framework and CSA CCoP 2.0 obligations for Critical Information Infrastructure — with the Pyxis GCP architecture as a like‑for‑like technology spine where the fit is direct.
+      </div>
+    </section>
+
+    <section id="matrix">
+      <h2><span class="n">§ 03</span> Gap matrix</h2>
+      <p class="h-sub">At‑a‑glance view of every domain, with severity keyed to the risk each gap creates: <span class="chip critical">Critical</span> blocks any live operation; <span class="chip high">High</span> blocks regulator or counterparty trust; <span class="chip medium">Medium</span> is required to scale beyond pilot; <span class="chip low">Low/started</span> already has meaningful groundwork.</p>
+
+      <div class="matrix-wrap">
+        <table class="matrix" aria-label="Gap matrix by domain">
+          <thead>
+            <tr>
+              <th>Domain</th>
+              <th>Current state (repo evidence)</th>
+              <th>Target state</th>
+              <th>Severity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="dim">Marketing &amp; brand surface</td>
+              <td class="state">Static HTML, hand‑built, on‑brand, deployed via GitHub Pages (CNAME present)</td>
+              <td class="state">CMS‑backed marketing site with staged environments, forms wired to a real ESP/CRM</td>
+              <td class="sev-cell"><span class="chip low">Started</span></td>
+            </tr>
+            <tr>
+              <td class="dim">Frontend applications</td>
+              <td class="state">None. No customer, operator, or admin console exists</td>
+              <td class="state">Three consoles (Capacity Holder, Capacity Buyer, Grid Operator/Admin) — Flutter or React</td>
+              <td class="sev-cell"><span class="chip critical">Critical</span></td>
+            </tr>
+            <tr>
+              <td class="dim">Backend microservices</td>
+              <td class="state">None. Contact form falls back to a <code>mailto:</code> handoff</td>
+              <td class="state">Domain services on GKE: Identity, Assets, Capacity Book, Matching, Dispatch, Settlement, Notifications</td>
+              <td class="sev-cell"><span class="chip critical">Critical</span></td>
+            </tr>
+            <tr>
+              <td class="dim">Identity &amp; access</td>
+              <td class="state">None</td>
+              <td class="state">KeyCloak or equivalent OIDC, MFA mandatory, RBAC + ABAC, Singpass/Corppass federation</td>
+              <td class="sev-cell"><span class="chip critical">Critical</span></td>
+            </tr>
+            <tr>
+              <td class="dim">Data platform</td>
+              <td class="state">None. No database, no schema, no warehouse</td>
+              <td class="state">Cloud SQL (OLTP) + BigQuery (warehouse) + timeseries store (Bigtable or TimescaleDB) for telemetry</td>
+              <td class="sev-cell"><span class="chip critical">Critical</span></td>
+            </tr>
+            <tr>
+              <td class="dim">Streaming &amp; real‑time</td>
+              <td class="state">None</td>
+              <td class="state">Pub/Sub + Dataflow for meter/telemetry ingest; sub‑second dispatch loop with deterministic replay</td>
+              <td class="sev-cell"><span class="chip critical">Critical</span></td>
+            </tr>
+            <tr>
+              <td class="dim">Grid / OT integration</td>
+              <td class="state">None. No SCADA, DERMS, meter‑data or ADMS interfaces</td>
+              <td class="state">IEC 61850 / DNP3 gateways, IEEE 2030.5 / OpenADR 2.0b, SP Group meter‑data connector, EMA market feeds</td>
+              <td class="sev-cell"><span class="chip critical">Critical</span></td>
+            </tr>
+            <tr>
+              <td class="dim">Matching, dispatch &amp; settlement</td>
+              <td class="state">None. Site describes it; no code</td>
+              <td class="state">Order book + clearing engine, ledger‑grade double‑entry with immutable audit, USEP‑aligned settlement runs</td>
+              <td class="sev-cell"><span class="chip critical">Critical</span></td>
+            </tr>
+            <tr>
+              <td class="dim">AI / ML orchestration</td>
+              <td class="state">None. Site describes forecasting &amp; optimisation as capabilities</td>
+              <td class="state">Feature store, forecasting (load / DER / price), MPC dispatcher, model registry &amp; monitored inference</td>
+              <td class="sev-cell"><span class="chip critical">Critical</span></td>
+            </tr>
+            <tr>
+              <td class="dim">Cybersecurity &amp; CII posture</td>
+              <td class="state">Static site only; no security architecture visible</td>
+              <td class="state">CSA CCoP 2.0 alignment, IEC 62443 for OT segment, NIST CSF 2.0, HSM/KMS, SIEM, IR runbooks, red‑team cadence</td>
+              <td class="sev-cell"><span class="chip critical">Critical</span></td>
+            </tr>
+            <tr>
+              <td class="dim">Observability &amp; SRE</td>
+              <td class="state">None</td>
+              <td class="state">Cloud Ops (Logging, Monitoring, Trace, Error Reporting), SLOs, on‑call rota, chaos drills for dispatch path</td>
+              <td class="sev-cell"><span class="chip high">High</span></td>
+            </tr>
+            <tr>
+              <td class="dim">Data analytics &amp; BI</td>
+              <td class="state">None</td>
+              <td class="state">BigQuery + dbt, Looker or Metabase, event schema, self‑serve counterparty statements, regulator‑ready reports</td>
+              <td class="sev-cell"><span class="chip high">High</span></td>
+            </tr>
+            <tr>
+              <td class="dim">DevOps / CI / CD</td>
+              <td class="state">GitHub only — no build, test, deploy pipeline; no IaC</td>
+              <td class="state">Cloud Build + Cloud Deploy or GitHub Actions, SonarQube, Binary Authorization, Terraform, ephemeral preview envs</td>
+              <td class="sev-cell"><span class="chip high">High</span></td>
+            </tr>
+            <tr>
+              <td class="dim">Regulatory &amp; compliance</td>
+              <td class="state">None. No PDPA notice, no data map, no MSSL alignment referenced</td>
+              <td class="state">EMA market‑participant readiness, PDPA data‑protection framework, retention policies, breach‑notification SOP</td>
+              <td class="sev-cell"><span class="chip high">High</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="detail">
+      <h2><span class="n">§ 04</span> Category detail</h2>
+      <p class="h-sub">Each domain expands into the concrete deltas between what exists and what a mature live platform requires, and the first move that should be made against it.</p>
+
+      <div class="cat-list">
+
+        <!-- 01 Frontend -->
+        <article class="cat critical">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">01</span><h3>Frontend applications</h3></div>
+            <span class="chip critical">Critical</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>A single marketing microsite: <code>index.html</code>, <code>resources.html</code>, one hero canvas animation. No authenticated surface, no state, no product screens.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li>Capacity‑Holder console — offer curves, revenue statements, dispatch history</li>
+                <li>Capacity‑Buyer console — bid entry, allocation view, invoices</li>
+                <li>Operator / Admin console — order book, dispatch overrides, KYC, incident switchboard</li>
+                <li>Design system with accessibility floor (WCAG 2.2 AA)</li>
+                <li>Framework: React + TS (web‑first), Flutter only if a mobile‑app surface is truly warranted</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Design‑sprint the three consoles in low‑fi</b> before writing any code, then stand up the Buyer console first — it is the shortest path to onboarding a paying counterparty and forcing the backend to become real.
+            </div>
+            <div class="meter" aria-label="Severity 4 of 4">
+              <div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div>
+              <span class="lbl">4 / 4</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 02 Backend -->
+        <article class="cat critical">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">02</span><h3>Backend microservices</h3></div>
+            <span class="chip critical">Critical</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>Zero services. The join form does not post to any server — it opens the visitor's mail client via <code>mailto:</code>.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li><b>Identity</b> · sessions, RBAC, delegated‑access consent</li>
+                <li><b>Party &amp; Asset</b> · counterparties, sites, meters, DERs</li>
+                <li><b>Capacity Book</b> · reservations, offers, bids, allocations</li>
+                <li><b>Matching &amp; Clearing</b> · order book, market‑maker, price discovery</li>
+                <li><b>Dispatch</b> · signals to DERs, ack/nack, deviation tracking</li>
+                <li><b>Settlement</b> · double‑entry ledger, netting, invoicing, payouts</li>
+                <li><b>Notifications</b> · Firebase Cloud Messaging, email, SMS, webhooks</li>
+                <li>Deployed on GKE per Pyxis pattern; Java/Spring or Node/TS, gRPC or REST + async via Pub/Sub</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Draft the domain map and event catalogue</b> (~15 aggregates, ~40 events) before choosing a language — the shape of the ledger and the dispatch loop dictates the runtime more than the reverse.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">4 / 4</span></div>
+          </div>
+        </article>
+
+        <!-- 03 Identity -->
+        <article class="cat critical">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">03</span><h3>Identity &amp; access management</h3></div>
+            <span class="chip critical">Critical</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>No auth. No user store. No secrets. Any "join" is an email intent.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li>KeyCloak (as Pyxis) or Google Identity Platform as the OIDC IdP</li>
+                <li><b>MFA mandatory</b> for every operator‑ or dispatch‑privileged role — hardware‑key backed for admins</li>
+                <li>RBAC on API + ABAC (attribute‑based) on data rows for multi‑tenant isolation</li>
+                <li>Singpass / Corppass federation for Singapore counterparty onboarding</li>
+                <li>SCIM provisioning; audit log every privilege change to WORM storage</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Adopt Google Identity Platform + Firebase Auth first</b> for pilot speed, but design the abstraction so a swap to KeyCloak or Auth0 for CII hardening is a config change, not a rewrite.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">4 / 4</span></div>
+          </div>
+        </article>
+
+        <!-- 04 Data -->
+        <article class="cat critical">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">04</span><h3>Data platform (OLTP, warehouse, timeseries)</h3></div>
+            <span class="chip critical">Critical</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>No database, no schema, no migrations, no warehouse. The site is stateless.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li><b>OLTP</b> · Cloud SQL for PostgreSQL, HA + regional replicas, PITR, encrypted at rest with CMEK</li>
+                <li><b>Timeseries</b> · Bigtable or TimescaleDB for meter/telemetry (millions of points/day per site)</li>
+                <li><b>Warehouse</b> · BigQuery for analytics, dbt for modelling, event‑sourced settlement fact tables</li>
+                <li><b>Object store</b> · GCS with lifecycle rules, immutable retention on settlement artefacts</li>
+                <li><b>Schema governance</b> · migrations via Liquibase or Atlas, dictated by dispatch/settlement correctness needs</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Pick the timeseries store first</b>, not last — meter cardinality &amp; retention economics will shape every downstream ingest and settlement decision.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">4 / 4</span></div>
+          </div>
+        </article>
+
+        <!-- 05 Streaming -->
+        <article class="cat critical">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">05</span><h3>Streaming &amp; real‑time</h3></div>
+            <span class="chip critical">Critical</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>None. The site is static; nothing arrives, nothing is emitted.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li>Pub/Sub for asynchronous domain events (offer/bid/allocation/dispatch/settlement)</li>
+                <li>Dataflow (Apache Beam) for meter‑stream aggregation, gap fill, quality tagging</li>
+                <li>Sub‑second dispatch path with idempotent commands and deterministic replay</li>
+                <li>Ordered event log (Kafka or Pub/Sub Lite) for audit reconstruction — regulator‑grade traceability</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Stand up a synthetic meter‑stream harness</b> to prove ingest, dispatch, and settlement round‑trip end‑to‑end before wiring a single real DER.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">4 / 4</span></div>
+          </div>
+        </article>
+
+        <!-- 06 OT / Grid integration -->
+        <article class="cat critical">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">06</span><h3>Grid &amp; OT integration <span style="font-family:var(--mono);font-size:11px;color:var(--corten);letter-spacing:.08em;">— NEW vs. Pyxis</span></h3></div>
+            <span class="chip critical">Critical</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>No integrations of any kind. No adapters, no gateways, no protocol stacks.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li><b>Meter data</b> · SP Group half‑hourly and 5‑minute feeds via authorised API</li>
+                <li><b>Market feeds</b> · EMA / EMC price and dispatch schedules (USEP, LCP)</li>
+                <li><b>DER control</b> · IEEE 2030.5 (SEP2) &amp; OpenADR 2.0b for demand response and DERs</li>
+                <li><b>Substation / OT</b> · IEC 61850 / DNP3 gateways where behind‑the‑meter industrial loads participate</li>
+                <li><b>Edge</b> · a hardened field gateway pattern for sites with intermittent WAN — buffered, signed telemetry</li>
+                <li><b>Segregation</b> · IT/OT boundary with unidirectional gateway or brokered mediation, IEC 62443 zoning</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Lock the SP Group meter‑data authorisation path first</b> — access, latency, and cost of that feed decide whether behind‑the‑meter is even a viable pilot topology in year one.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">4 / 4</span></div>
+          </div>
+        </article>
+
+        <!-- 07 Matching / dispatch / settlement -->
+        <article class="cat critical">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">07</span><h3>Matching, dispatch &amp; settlement <span style="font-family:var(--mono);font-size:11px;color:var(--corten);letter-spacing:.08em;">— NEW vs. Pyxis</span></h3></div>
+            <span class="chip critical">Critical</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>Described on the site as "matches supply to demand, prices it fairly and settles it automatically". No code exists.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li><b>Order book</b> · continuous or periodic call market, configurable by product</li>
+                <li><b>Clearing</b> · price discovery with locational and network‑constraint awareness</li>
+                <li><b>Dispatch</b> · signal → ack → measure → deviation ledger, with fail‑safe local set‑points</li>
+                <li><b>Settlement</b> · double‑entry ledger, netting, tax, invoicing, payout to bank; reconcile against USEP where applicable</li>
+                <li><b>Audit</b> · every decision reproducible from the event log; regulator‑ready trade blotter</li>
+                <li><b>Financial rails</b> · GIRO/FAST or PSP integration (Stripe/Airwallex) with bank‑grade reconciliation</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Write the settlement rule‑book before the matching engine.</b> If two counterparties can't agree on the invoice arithmetic on paper, code will not save them; when they can, the engine becomes a rendering of an agreed spec.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">4 / 4</span></div>
+          </div>
+        </article>
+
+        <!-- 08 AI / ML -->
+        <article class="cat critical">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">08</span><h3>AI / ML orchestration</h3></div>
+            <span class="chip critical">Critical</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>None. Site copy foregrounds AI orchestration ("AI that orchestrates the whole network") — no models, no pipelines, no registry.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li><b>Forecasting</b> · load, DER availability, price — retrained on schedule with drift alerts</li>
+                <li><b>Optimisation</b> · Model‑Predictive Control (MPC) for dispatch under grid constraints</li>
+                <li><b>Feature store</b> · Vertex AI Feature Store or Feast for training/serving parity</li>
+                <li><b>Model governance</b> · registry, lineage, canary rollouts, human‑override kill switches</li>
+                <li><b>Guardrails</b> · every automated dispatch bounded by safe operating envelopes with hard‑coded overrides</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Ship a deterministic rules‑based dispatcher first</b>; earn the right to introduce ML once the settlement rulebook is stable and the telemetry corpus is real.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">4 / 4</span></div>
+          </div>
+        </article>
+
+        <!-- 09 Cyber -->
+        <article class="cat critical">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">09</span><h3>Cybersecurity &amp; CII posture <span style="font-family:var(--mono);font-size:11px;color:var(--corten);letter-spacing:.08em;">— NEW vs. Pyxis</span></h3></div>
+            <span class="chip critical">Critical</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>Static hosting only. Not a security posture — it is the absence of one. Beyond browser TLS from GitHub Pages, nothing is architected.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li><b>Frameworks</b> · CSA <b>CCoP 2.0</b> alignment (Energy sub‑sector), <b>IEC 62443</b> for OT, <b>NIST CSF 2.0</b> for enterprise</li>
+                <li><b>Keys</b> · Cloud KMS with CMEK, envelope encryption; HSM‑backed signing for dispatch commands</li>
+                <li><b>Network</b> · private VPC, Cloud Armor at edge, mutual TLS between services, egress deny‑by‑default</li>
+                <li><b>Boundary</b> · IT/OT DMZ with brokered mediation; jump hosts; no operator laptop touches OT directly</li>
+                <li><b>Detect &amp; respond</b> · SIEM (Chronicle or Splunk), 24×7 monitoring by pilot end, quarterly red‑team, IR runbooks, tabletop drills</li>
+                <li><b>Governance</b> · CISO‑equivalent function from month one, third‑party attestation before first live dispatch</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Commission a CCoP‑aligned target‑state security architecture</b> in parallel with product design — retrofitting CII controls is materially more expensive than building to them.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">4 / 4</span></div>
+          </div>
+        </article>
+
+        <!-- 10 Observability -->
+        <article class="cat high">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">10</span><h3>Observability &amp; SRE</h3></div>
+            <span class="chip high">High</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>None visible. No logs, no metrics, no traces, no alerts.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li>Cloud Logging + Cloud Monitoring + Cloud Trace + Error Reporting</li>
+                <li>SLOs on the dispatch loop, ingest lag, and settlement‑close time</li>
+                <li>On‑call rota with PagerDuty‑style escalation from the first pilot</li>
+                <li>Chaos drills on the dispatch path — an untested failover is not a failover</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Bake the OpenTelemetry SDK into service templates day one.</b> Instrumentation added later is instrumentation that stays uneven.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">3 / 4</span></div>
+          </div>
+        </article>
+
+        <!-- 11 Analytics -->
+        <article class="cat high">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">11</span><h3>Data analytics &amp; BI</h3></div>
+            <span class="chip high">High</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>None. No warehouse, no models, no dashboards.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li><b>Warehouse</b> · BigQuery, modelled with dbt on an event‑sourced core</li>
+                <li><b>Counterparty analytics</b> · self‑serve statements, utilisation, capture rate, deviation attribution</li>
+                <li><b>Operator analytics</b> · order book depth, clearing efficiency, cross‑subsidy checks</li>
+                <li><b>Regulator reports</b> · pre‑formatted extracts for EMA / EMC on schedule</li>
+                <li><b>Product analytics</b> · funnel, activation, retention on the operator/buyer consoles</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Publish the event schema before the first line of frontend code.</b> Analytics debt caused by post‑hoc renaming is the single most common tax on data teams at year two.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">3 / 4</span></div>
+          </div>
+        </article>
+
+        <!-- 12 DevOps -->
+        <article class="cat high">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">12</span><h3>DevOps / CI / CD / IaC</h3></div>
+            <span class="chip high">High</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>GitHub repo with GitHub Pages hosting. No pipelines, no tests, no infrastructure‑as‑code, no scans.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li>Cloud Build (or GitHub Actions) → Cloud Deploy, with staged rollouts</li>
+                <li>SonarQube for code quality, dependency‑scan &amp; SBOM, Binary Authorization on GKE</li>
+                <li>Terraform for every cloud resource — no click‑ops in prod, ever</li>
+                <li>Ephemeral preview environments per PR; branch‑protected main; conventional‑commits for changelog automation</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Start with Terraform + Cloud Build from the first backend commit.</b> The Pyxis playbook here is directly reusable — do not accept a hand‑built dev environment as a shortcut.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">3 / 4</span></div>
+          </div>
+        </article>
+
+        <!-- 13 Regulatory -->
+        <article class="cat high">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">13</span><h3>Regulatory &amp; compliance</h3></div>
+            <span class="chip high">High</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>No PDPA notice, no cookie policy, no data map, no market‑participant framing.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li><b>PDPA</b> · privacy policy, data inventory, DPO named, breach‑notification SOP</li>
+                <li><b>EMA readiness</b> · market‑participant licensing pathway mapped; sandbox engagement (regulatory sandbox / open‑innovation route) formalised</li>
+                <li><b>MAS considerations</b> · payment‑services scoping if platform holds funds — usually structure to avoid</li>
+                <li><b>Retention</b> · settlement‑grade records for 7+ years, WORM where required</li>
+                <li><b>Contracts</b> · counterparty agreement, DER access terms, service credits</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Engage EMA through the Regulatory Sandbox track</b> before technical build passes the pilot mark; alignment on market design is the single largest exogenous risk.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">3 / 4</span></div>
+          </div>
+        </article>
+
+        <!-- 14 Marketing -->
+        <article class="cat low">
+          <div class="strip"></div>
+          <div class="cat-head">
+            <div><span class="num">14</span><h3>Marketing &amp; brand surface</h3></div>
+            <span class="chip low">Started</span>
+          </div>
+          <div class="cat-body">
+            <div class="col current">
+              <div class="col-lbl">Current</div>
+              <p>Well‑crafted static site — clear thesis, deliberate palette, working canvas hero, resources scaffold. GitHub Pages host with custom domain.</p>
+            </div>
+            <div class="col target">
+              <div class="col-lbl">Target</div>
+              <ul>
+                <li>A lightweight CMS if content pace grows (Contentful, Sanity, or Markdown+build)</li>
+                <li>Contact form wired to a real backend / CRM (HubSpot or similar) — replace <code>mailto:</code></li>
+                <li>Analytics with a consent‑aware tool (Plausible or GA4 with proper banner)</li>
+                <li>OpenGraph &amp; structured data for the resources listings once real content exists</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-foot">
+            <div class="next-step">
+              <span class="lbl">Recommended first move</span>
+              <b>Replace the <code>mailto:</code> form with a server‑backed capture</b> — every unlogged inbound is a warm lead lost to a spam folder or a habits‑of‑browser oddity.
+            </div>
+            <div class="meter"><div class="blocks"><span class="b"></span><span class="b"></span><span class="b"></span><span class="b"></span></div><span class="lbl">1 / 4</span></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="delta">
+      <h2><span class="n">§ 05</span> Where the Pyxis blueprint carries — and where it doesn't</h2>
+      <p class="h-sub">Reusing the founders' prior architecture accelerates the enterprise scaffolding. It says nothing about the four domains that make Nervve a grid‑market operator rather than a booking app.</p>
+
+      <div class="delta">
+        <div class="delta-card same">
+          <div class="lbl">Reuses cleanly from Pyxis</div>
+          <h3>The enterprise scaffolding transfers.</h3>
+          <ul>
+            <li><b>GKE</b> as the workload substrate for microservices</li>
+            <li><b>Cloud SQL (Postgres)</b> as the OLTP store</li>
+            <li><b>KeyCloak</b> as the identity broker</li>
+            <li><b>Cloud Load Balancing + Cloud Armor</b> at the edge</li>
+            <li><b>Cloud Build / Cloud Deploy / SonarQube / Binary Authorization</b> as the delivery pipeline</li>
+            <li><b>Cloud Logging / Monitoring / Error Reporting</b> for observability</li>
+            <li><b>Firebase Cloud Messaging</b> for notifications</li>
+            <li><b>Private VPC, Cloud IAM, KMS, Command Center</b> as the security floor</li>
+          </ul>
+        </div>
+        <div class="delta-card new">
+          <div class="lbl">Net‑new for Nervve</div>
+          <h3>Four domains Pyxis never needed.</h3>
+          <ul>
+            <li><b>Streaming ingest</b> — Pub/Sub, Dataflow, timeseries store; meter data is nothing like booking data</li>
+            <li><b>OT integration</b> — IEC 61850, DNP3, IEEE 2030.5, OpenADR, field gateways, IT/OT boundary</li>
+            <li><b>Financial‑grade matching &amp; settlement</b> — order book, clearing, double‑entry ledger, invoicing, payouts, regulator‑ready audit</li>
+            <li><b>CII cyber posture</b> — CCoP 2.0 + IEC 62443, HSM‑backed signing, SIEM, 24×7 monitoring, red‑team cadence, DPO/CISO governance</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <h2><span class="n">§ 06</span> Sequenced roadmap</h2>
+      <p class="h-sub">Four phases, each earning the right to the next by proving something concrete. Timelines assume a small, focused engineering team (see next section).</p>
+
+      <div class="phases">
+        <div class="phase">
+          <div class="p-n">Phase 0</div>
+          <h4>Foundations</h4>
+          <div class="p-when">Months 0 – 3</div>
+          <ul>
+            <li>Domain map + event catalogue</li>
+            <li>Terraform baseline on GCP</li>
+            <li>KMS, IAM, VPC, private GKE cluster</li>
+            <li>CI/CD scaffolding, Binary Authorization</li>
+            <li>CCoP‑aligned security target document</li>
+            <li>Settlement rule‑book v1 (on paper)</li>
+            <li>EMA sandbox engagement opened</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="p-n">Phase 1</div>
+          <h4>Closed pilot</h4>
+          <div class="p-when">Months 3 – 9</div>
+          <ul>
+            <li>Buyer + Operator consoles v1</li>
+            <li>Rules‑based dispatcher (no ML yet)</li>
+            <li>Deterministic matching engine</li>
+            <li>Ledger + invoicing (manual payout)</li>
+            <li>Meter ingest for 1 – 2 pilot sites</li>
+            <li>SP Group data path proven</li>
+            <li>Observability floor + on‑call</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="p-n">Phase 2</div>
+          <h4>Regulated pilot</h4>
+          <div class="p-when">Months 9 – 18</div>
+          <ul>
+            <li>Multi‑counterparty pilot under EMA sandbox</li>
+            <li>Automated payout rails</li>
+            <li>Deviation ledger &amp; settlement audit</li>
+            <li>Full CCoP alignment + third‑party attest</li>
+            <li>Warehouse + first BI dashboards</li>
+            <li>Holder console + self‑serve statements</li>
+            <li>First forecast/optimisation models in shadow</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="p-n">Phase 3</div>
+          <h4>Scale &amp; travel</h4>
+          <div class="p-when">Months 18 – 30</div>
+          <ul>
+            <li>MPC dispatcher in production w/ overrides</li>
+            <li>Regional multi‑site, multi‑tenant</li>
+            <li>SIEM + 24×7 monitoring</li>
+            <li>Certifications: ISO 27001, SOC 2</li>
+            <li>Second‑market playbook (an APAC grid)</li>
+            <li>Partner API for retailers &amp; DERMs</li>
+            <li>Quarterly red‑team cadence</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="economics">
+      <h2><span class="n">§ 07</span> Team &amp; order‑of‑magnitude economics</h2>
+      <p class="h-sub">A defensible shape of the engineering, security and regulatory investment required to move from repo‑zero to Phase 2. Directional, not a bid — meant to frame conversations with capital, not to bind an engineering plan.</p>
+
+      <div class="matrix-wrap">
+        <table class="matrix" aria-label="Team &amp; economics">
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Phase 0 – 1 headcount</th>
+              <th>Phase 2 headcount</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="dim">Platform / backend</td>
+              <td class="state">2 – 3 senior engineers</td>
+              <td class="state">4 – 6 engineers + tech lead</td>
+              <td class="state">Java or Node — biased to whichever the founding CTO can steward directly</td>
+            </tr>
+            <tr>
+              <td class="dim">Frontend</td>
+              <td class="state">1 senior</td>
+              <td class="state">2 – 3 + design system</td>
+              <td class="state">React + TS first; add mobile only when field ops actually need it</td>
+            </tr>
+            <tr>
+              <td class="dim">Data / ML</td>
+              <td class="state">1 data engineer</td>
+              <td class="state">+ 1 ML engineer, + 1 analytics</td>
+              <td class="state">ML only earns headcount once telemetry is real and the rules‑based dispatcher is live</td>
+            </tr>
+            <tr>
+              <td class="dim">SRE / infra</td>
+              <td class="state">1 (part‑shared with backend)</td>
+              <td class="state">2 dedicated</td>
+              <td class="state">On‑call becomes untenable without a dedicated function by end of Phase 1</td>
+            </tr>
+            <tr>
+              <td class="dim">Security / CII</td>
+              <td class="state">Fractional CISO + external advisor</td>
+              <td class="state">1 in‑house security lead + retained SOC</td>
+              <td class="state">Do not defer past Phase 0 — retrofit cost is 3 – 5× build‑in cost</td>
+            </tr>
+            <tr>
+              <td class="dim">Regulatory / market design</td>
+              <td class="state">Fractional or advisor</td>
+              <td class="state">1 dedicated market‑design lead</td>
+              <td class="state">EMA sandbox conversations move at regulator pace, not engineering pace</td>
+            </tr>
+            <tr>
+              <td class="dim">Cloud spend (indicative)</td>
+              <td class="state">USD 3 – 8k / mo</td>
+              <td class="state">USD 20 – 60k / mo</td>
+              <td class="state">Dominated by telemetry storage and warehouse compute once real meters attach</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="report-foot">
+      <div class="l">Prepared for Corten Energy — solutions‑architecture review of the Nervve platform.</div>
+      <div class="r">Rev 01 · 2026‑08‑06</div>
+    </footer>
+
+  </main>
+
+</div>

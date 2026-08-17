@@ -101,6 +101,47 @@
   .step p{color:var(--dim);font-size:14px;margin:0;font-weight:400;line-height:1.55}
   .invisible-note{margin-top:34px;text-align:center;color:var(--faint);font-size:15px;font-style:italic}
 
+  /* ---- pseudo-marketplace visual ---- */
+  .market{margin-top:56px;background:linear-gradient(180deg,rgba(23,32,63,.6),rgba(15,22,49,.6));
+    border:1px solid var(--line);border-radius:16px;padding:22px 26px;font-family:var(--sans);overflow:hidden}
+  .market-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;
+    color:var(--faint);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .market-head .mh-l{text-align:left}
+  .market-head .mh-r{text-align:right}
+  .market-head .mh-c{display:inline-flex;align-items:center;gap:7px;color:var(--dim);letter-spacing:.16em}
+  .market-head .mdot{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px rgba(74,222,128,.7);animation:mktPulse 1.6s ease-in-out infinite}
+  @keyframes mktPulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .market-body{display:grid;grid-template-columns:1fr 120px 1fr;gap:14px;padding:18px 0;position:relative;min-height:240px}
+  @media(max-width:640px){.market-body{grid-template-columns:1fr 80px 1fr}}
+  .market .side{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+  .market .row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;
+    padding:7px 12px;background:rgba(255,255,255,.02);border:1px solid transparent;border-radius:9px;
+    font-size:12px;color:var(--dim);transition:background .3s,border-color .3s,transform .3s,opacity .3s;font-variant-numeric:tabular-nums}
+  .market .row .tag{font-family:'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:var(--faint);letter-spacing:.05em}
+  .market .row .bar{height:4px;border-radius:2px;background:rgba(255,255,255,.06);position:relative;overflow:hidden}
+  .market .row .bar i{position:absolute;top:0;bottom:0;left:0;border-radius:2px;background:linear-gradient(90deg,var(--corten),var(--nervve));opacity:.5;transition:width .5s ease}
+  .market .row .mw{color:var(--ink);font-weight:600;font-size:12.5px;min-width:52px;text-align:right}
+  .market .bids .row{grid-template-columns:auto 1fr auto;direction:rtl}
+  .market .bids .row > *{direction:ltr}
+  .market .bids .row .bar i{background:linear-gradient(90deg,#6b90ff,#92a8ee);right:0;left:auto}
+  .market .row.matched{background:rgba(236,117,37,.14);border-color:rgba(236,117,37,.5);transform:translateX(0)}
+  .market .offers .row.matched{transform:translateX(6px)}
+  .market .bids .row.matched{transform:translateX(-6px)}
+  .market .row.gone{opacity:0;transform:scale(.94)}
+  .clearing{position:relative;display:grid;place-items:center}
+  .clearing-line{position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(180deg,transparent,var(--line),transparent)}
+  .clearing-arcs{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .clearing-arcs path{fill:none;stroke:var(--corten);stroke-width:1.2;opacity:0;
+    stroke-dasharray:220;stroke-dashoffset:220}
+  .clearing-arcs path.fire{animation:arcFire 900ms ease-out forwards}
+  @keyframes arcFire{0%{opacity:0;stroke-dashoffset:220}20%{opacity:.9}100%{opacity:0;stroke-dashoffset:0}}
+  .clearing-badge{background:rgba(236,117,37,.14);border:1px solid rgba(236,117,37,.55);color:var(--corten);
+    font-size:10.5px;letter-spacing:.22em;font-weight:700;padding:6px 10px;border-radius:20px;position:relative;z-index:2;transition:transform .3s,box-shadow .3s}
+  .clearing-badge.fire{transform:scale(1.06);box-shadow:0 0 22px rgba(236,117,37,.35)}
+  .market-foot{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--line);
+    color:var(--faint);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+  .market-foot b{color:var(--ink);font-size:20px;letter-spacing:.02em;text-transform:none;font-variant-numeric:tabular-nums;font-weight:700}
+
   /* ---- identity: brain + CNS ---- */
   .ident{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:56px}
   @media(max-width:820px){.ident{grid-template-columns:1fr}}
@@ -394,6 +435,28 @@
         <p>Nervve<sup>™</sup> matches supply to demand, prices it fairly and settles it automatically. Both sides carry on operating exactly as before.</p>
       </div>
     </div>
+
+    <div class="market reveal" aria-hidden="true">
+      <div class="market-head">
+        <span class="mh-l">Offers · MW available</span>
+        <span class="mh-c"><i class="mdot"></i> Live</span>
+        <span class="mh-r">Bids · MW needed</span>
+      </div>
+      <div class="market-body">
+        <ul class="side offers" id="mkt-offers"></ul>
+        <div class="clearing">
+          <div class="clearing-line"></div>
+          <svg class="clearing-arcs" id="mkt-arcs" viewBox="0 0 120 320" preserveAspectRatio="none"></svg>
+          <div class="clearing-badge" id="mkt-badge">CLEARING</div>
+        </div>
+        <ul class="side bids" id="mkt-bids"></ul>
+      </div>
+      <div class="market-foot">
+        <span>MW cleared today</span>
+        <b id="mkt-cleared">1,247.3</b>
+      </div>
+    </div>
+
     <p class="invisible-note reveal">The trade happens in the background. Most of the time, the people it helps never see it run.</p>
   </div>
 </section>
@@ -704,6 +767,91 @@ document.getElementById('joinForm').addEventListener('submit',e=>{
   note.textContent='Opening your email app… if nothing happens, write to hello@corten.energy';
   note.style.color='var(--nervve)';
 });
+
+/* ---- pseudo-marketplace: order-book style visual ---- */
+(function(){
+  const off=document.getElementById('mkt-offers'), bid=document.getElementById('mkt-bids');
+  const arcs=document.getElementById('mkt-arcs'), badge=document.getElementById('mkt-badge');
+  const counter=document.getElementById('mkt-cleared');
+  if(!off||!bid) return;
+  const OFFER_TAGS=['SITE-A7','NODE-C3','GRID-F1','SITE-B9','NODE-D2','GRID-K4','SITE-M6','NODE-P8'];
+  const BID_TAGS  =['LOAD-01','LOAD-11','LOAD-04','LOAD-17','LOAD-22','LOAD-08','LOAD-33','LOAD-19'];
+  const ROWS=5;
+  const rng=(a,b)=>a+Math.random()*(b-a);
+  function mkRow(tag,mw,pct,side){
+    const li=document.createElement('li');
+    li.className='row';
+    li.innerHTML='<span class="tag">'+tag+'</span>'+
+                 '<span class="bar"><i style="width:'+pct+'%"></i></span>'+
+                 '<span class="mw">'+mw.toFixed(1)+' MW</span>';
+    return li;
+  }
+  function seed(list, tags){
+    list.innerHTML='';
+    const pool=tags.slice().sort(()=>Math.random()-.5);
+    for(let i=0;i<ROWS;i++){
+      const mw=rng(0.4,4.2);
+      list.appendChild(mkRow(pool[i%pool.length], mw, 20+Math.random()*75, list.className));
+    }
+  }
+  seed(off, OFFER_TAGS); seed(bid, BID_TAGS);
+
+  let cleared=1247.3;
+  function fmt(n){ return n.toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1}); }
+
+  function fireArc(y1,y2){
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    const d='M 0 '+y1+' C 60 '+y1+' 60 '+y2+' 120 '+y2;
+    p.setAttribute('d',d);
+    arcs.appendChild(p);
+    requestAnimationFrame(()=>p.classList.add('fire'));
+    setTimeout(()=>p.remove(), 950);
+  }
+
+  function replaceRow(list, row, tags){
+    const pool=tags.filter(t=>!Array.from(list.children).some(r=>r.querySelector('.tag').textContent===t));
+    const tag=pool.length?pool[Math.floor(Math.random()*pool.length)]:tags[Math.floor(Math.random()*tags.length)];
+    const mw=rng(0.4,4.2);
+    const fresh=mkRow(tag,mw,20+Math.random()*75,list.className);
+    fresh.style.opacity='0'; fresh.style.transform='scale(.94)';
+    list.replaceChild(fresh,row);
+    requestAnimationFrame(()=>{fresh.style.opacity=''; fresh.style.transform='';});
+  }
+
+  function clearOne(){
+    const oRows=Array.from(off.children), bRows=Array.from(bid.children);
+    if(!oRows.length||!bRows.length) return;
+    const o=oRows[Math.floor(Math.random()*oRows.length)];
+    const b=bRows[Math.floor(Math.random()*bRows.length)];
+    const oRect=o.getBoundingClientRect(), bRect=b.getBoundingClientRect();
+    const parent=arcs.getBoundingClientRect();
+    const y1=oRect.top+oRect.height/2-parent.top;
+    const y2=bRect.top+bRect.height/2-parent.top;
+    const H=arcs.clientHeight||parent.height||320;
+    fireArc(y1*(320/H), y2*(320/H));
+    o.classList.add('matched'); b.classList.add('matched');
+    badge.classList.add('fire');
+    const size=parseFloat(o.querySelector('.mw').textContent);
+    setTimeout(()=>{ badge.classList.remove('fire'); },600);
+    setTimeout(()=>{ o.classList.add('gone'); b.classList.add('gone'); },520);
+    setTimeout(()=>{
+      replaceRow(off,o,OFFER_TAGS);
+      replaceRow(bid,b,BID_TAGS);
+    }, 820);
+    cleared += size;
+    counter.textContent = fmt(cleared);
+  }
+
+  let interval;
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ if(!interval) interval=setInterval(clearOne, 1400); }
+      else{ clearInterval(interval); interval=null; }
+    });
+  },{threshold:.1});
+  io.observe(off.closest('.market'));
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ clearInterval(interval); interval=null; }
+})();
 
 /* ---- hero: shifting-capacity animation ---- */
 (function(){

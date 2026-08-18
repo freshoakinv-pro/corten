@@ -1,0 +1,1148 @@
+<title>Nervve — stakeholder map</title>
+<meta name="description" content="A stakeholder map for the Nervve platform across five governance dimensions: information flow, control mechanisms, trading clearing, audit trail, and cybersecurity." />
+
+<style>
+  :root {
+    --ground: #F7F4EE;
+    --ground-2: #EFEAE0;
+    --panel: #FFFFFF;
+    --panel-2: #F3EEE4;
+    --rule: #DFD7C7;
+    --rule-strong: #C7BDA8;
+
+    --ink: #0F1631;
+    --ink-2: #2C3554;
+    --muted: #6B7391;
+    --faint: #96998F;
+
+    --navy: #27396B;
+    --navy-deep: #1B274C;
+    --corten: #EC7525;
+    --corten-deep: #C85F17;
+    --corten-wash: rgba(236, 117, 37, 0.10);
+    --navy-wash: rgba(39, 57, 107, 0.06);
+
+    /* Dimension palette — each dimension gets a distinct hue.
+       Kept muted so no single dimension dominates the page. */
+    --dim-info:    #4A5FA0;   --dim-info-tint:    rgba(74,  95,  160, 0.10);
+    --dim-control: #C85F17;   --dim-control-tint: rgba(200, 95,  23,  0.10);
+    --dim-trade:   #B58729;   --dim-trade-tint:   rgba(181, 135, 41,  0.12);
+    --dim-audit:   #4F7A5E;   --dim-audit-tint:   rgba(79,  122, 94,  0.12);
+    --dim-cyber:   #B0342B;   --dim-cyber-tint:   rgba(176, 52,  43,  0.10);
+
+    --serif: Iowan Old Style, "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+    --maxw: 1360px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #0C1124; --ground-2: #0F1631;
+      --panel: #141B36;  --panel-2: #1A2244;
+      --rule: #2A3358;   --rule-strong: #3A4675;
+      --ink: #EEF1F7;    --ink-2: #C6CCE0;
+      --muted: #9AA6C2;  --faint: #64718F;
+      --navy: #92A8EE;   --navy-deep: #6A82C7;
+      --corten: #F4A65A; --corten-deep: #EC7525;
+      --corten-wash: rgba(244, 166, 90, 0.12);
+      --navy-wash: rgba(146, 168, 238, 0.08);
+      --dim-info:    #92A8EE;   --dim-info-tint:    rgba(146, 168, 238, 0.14);
+      --dim-control: #F4A65A;   --dim-control-tint: rgba(244, 166, 90,  0.14);
+      --dim-trade:   #E0B04B;   --dim-trade-tint:   rgba(224, 176, 75,  0.14);
+      --dim-audit:   #7DAF8D;   --dim-audit-tint:   rgba(125, 175, 141, 0.14);
+      --dim-cyber:   #E36457;   --dim-cyber-tint:   rgba(227, 100, 87,  0.14);
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #F7F4EE; --ground-2: #EFEAE0; --panel: #FFFFFF; --panel-2: #F3EEE4;
+    --rule: #DFD7C7; --rule-strong: #C7BDA8;
+    --ink: #0F1631; --ink-2: #2C3554; --muted: #6B7391; --faint: #96998F;
+    --navy: #27396B; --navy-deep: #1B274C; --corten: #EC7525; --corten-deep: #C85F17;
+    --corten-wash: rgba(236, 117, 37, 0.10);
+    --navy-wash: rgba(39, 57, 107, 0.06);
+    --dim-info:    #4A5FA0;   --dim-info-tint:    rgba(74,  95,  160, 0.10);
+    --dim-control: #C85F17;   --dim-control-tint: rgba(200, 95,  23,  0.10);
+    --dim-trade:   #B58729;   --dim-trade-tint:   rgba(181, 135, 41,  0.12);
+    --dim-audit:   #4F7A5E;   --dim-audit-tint:   rgba(79,  122, 94,  0.12);
+    --dim-cyber:   #B0342B;   --dim-cyber-tint:   rgba(176, 52,  43,  0.10);
+  }
+  :root[data-theme="dark"] {
+    --ground: #0C1124; --ground-2: #0F1631; --panel: #141B36; --panel-2: #1A2244;
+    --rule: #2A3358; --rule-strong: #3A4675;
+    --ink: #EEF1F7; --ink-2: #C6CCE0; --muted: #9AA6C2; --faint: #64718F;
+    --navy: #92A8EE; --navy-deep: #6A82C7; --corten: #F4A65A; --corten-deep: #EC7525;
+    --corten-wash: rgba(244, 166, 90, 0.12);
+    --navy-wash: rgba(146, 168, 238, 0.08);
+    --dim-info:    #92A8EE;   --dim-info-tint:    rgba(146, 168, 238, 0.14);
+    --dim-control: #F4A65A;   --dim-control-tint: rgba(244, 166, 90,  0.14);
+    --dim-trade:   #E0B04B;   --dim-trade-tint:   rgba(224, 176, 75,  0.14);
+    --dim-audit:   #7DAF8D;   --dim-audit-tint:   rgba(125, 175, 141, 0.14);
+    --dim-cyber:   #E36457;   --dim-cyber-tint:   rgba(227, 100, 87,  0.14);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--navy); text-decoration: none; }
+  a:hover { color: var(--corten); }
+  a:focus-visible { outline: 2px solid var(--corten); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  .page {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 44px 28px 80px;
+  }
+
+  header.mast {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .brand {
+    font-family: var(--serif); font-style: italic;
+    color: var(--muted); font-size: 14px;
+  }
+  .brand b { font-style: normal; color: var(--ink); font-weight: 700; }
+  .meta {
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--faint); letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .meta span + span { margin-left: 18px; }
+
+  .title-row { margin-bottom: 22px; }
+  .eyebrow {
+    font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--corten); font-weight: 700; margin-bottom: 10px;
+  }
+  h1 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(28px, 3.8vw, 40px); line-height: 1.1;
+    margin: 0 0 12px; letter-spacing: -0.015em; text-wrap: balance;
+    max-width: 32ch;
+  }
+  .kicker {
+    color: var(--muted); font-size: 15px;
+    max-width: 82ch; margin: 0;
+  }
+
+  section { margin-top: 56px; scroll-margin-top: 20px; }
+  h2 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(22px, 2.8vw, 30px); line-height: 1.15;
+    margin: 0 0 8px; letter-spacing: -0.015em; text-wrap: balance;
+  }
+  h2 .n {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em;
+    color: var(--corten); margin-right: 14px;
+    vertical-align: middle; text-transform: uppercase; font-weight: 500;
+  }
+  h2 + .h-sub {
+    color: var(--muted); font-size: 15px;
+    margin: 0 0 28px; max-width: 78ch; line-height: 1.55;
+  }
+  h3 {
+    font-family: var(--serif); font-size: 18px; font-weight: 500;
+    margin: 0 0 6px; letter-spacing: -0.005em;
+  }
+
+  /* --- Dimension chip --- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px 3px 8px;
+    border-radius: 2px;
+    font-weight: 700;
+    white-space: nowrap;
+    line-height: 1.4;
+  }
+  .chip::before {
+    content: "";
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor;
+  }
+  .chip.info    { background: var(--dim-info-tint);    color: var(--dim-info); }
+  .chip.control { background: var(--dim-control-tint); color: var(--dim-control); }
+  .chip.trade   { background: var(--dim-trade-tint);   color: var(--dim-trade); }
+  .chip.audit   { background: var(--dim-audit-tint);   color: var(--dim-audit); }
+  .chip.cyber   { background: var(--dim-cyber-tint);   color: var(--dim-cyber); }
+
+  /* --- Framing callout --- */
+  .frame {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 24px 30px;
+  }
+  .frame p {
+    font-family: var(--serif);
+    font-size: 16.5px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0 0 12px;
+  }
+  .frame p:last-child { margin-bottom: 0; }
+  .frame b { color: var(--corten-deep); font-weight: 600; }
+
+  /* --- Dimension legend cards --- */
+  .dim-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-top: 24px;
+  }
+  @media (max-width: 1000px) { .dim-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px)  { .dim-grid { grid-template-columns: 1fr; } }
+  .dim-card {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 16px 18px 18px;
+    position: relative;
+  }
+  .dim-card .dim-strip {
+    height: 3px;
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+  .dim-card.info    .dim-strip { background: var(--dim-info); }
+  .dim-card.control .dim-strip { background: var(--dim-control); }
+  .dim-card.trade   .dim-strip { background: var(--dim-trade); }
+  .dim-card.audit   .dim-strip { background: var(--dim-audit); }
+  .dim-card.cyber   .dim-strip { background: var(--dim-cyber); }
+  .dim-card .head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0 10px;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .dim-card.info    .head { color: var(--dim-info); }
+  .dim-card.control .head { color: var(--dim-control); }
+  .dim-card.trade   .head { color: var(--dim-trade); }
+  .dim-card.audit   .head { color: var(--dim-audit); }
+  .dim-card.cyber   .head { color: var(--dim-cyber); }
+  .dim-card h3 {
+    font-size: 16px; font-weight: 500; color: var(--ink);
+    margin: 0 0 6px;
+  }
+  .dim-card p {
+    font-size: 12.5px; line-height: 1.55; color: var(--ink-2);
+    margin: 0;
+  }
+
+  /* --- Main matrix --- */
+  .matrix-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: var(--panel);
+    margin-top: 20px;
+  }
+  table.matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    min-width: 1080px;
+    table-layout: fixed;
+  }
+  table.matrix col.dim { width: 15.6%; }
+  table.matrix col.who { width: 22%; }
+  table.matrix thead th {
+    padding: 12px 12px 10px;
+    text-align: left;
+    background: var(--panel-2);
+    border-bottom: 1px solid var(--rule-strong);
+    vertical-align: bottom;
+  }
+  table.matrix thead th.who-h {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  table.matrix thead th.dim-h {
+    padding-top: 8px;
+    padding-bottom: 12px;
+  }
+  table.matrix tbody td {
+    padding: 12px 12px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  table.matrix tbody tr:last-child td { border-bottom: 0; }
+  table.matrix td.who {
+    background: var(--panel-2);
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 12.5px;
+    border-right: 1px solid var(--rule);
+  }
+  table.matrix td.who .sub {
+    display: block;
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    margin-top: 3px;
+    font-family: var(--mono);
+    text-transform: uppercase;
+  }
+  table.matrix td.cell-info    { background: color-mix(in srgb, var(--dim-info-tint)    50%, transparent); }
+  table.matrix td.cell-control { background: color-mix(in srgb, var(--dim-control-tint) 50%, transparent); }
+  table.matrix td.cell-trade   { background: color-mix(in srgb, var(--dim-trade-tint)   50%, transparent); }
+  table.matrix td.cell-audit   { background: color-mix(in srgb, var(--dim-audit-tint)   50%, transparent); }
+  table.matrix td.cell-cyber   { background: color-mix(in srgb, var(--dim-cyber-tint)   50%, transparent); }
+  table.matrix td.cell-none {
+    color: var(--faint);
+    font-style: italic;
+    font-size: 11px;
+  }
+  table.matrix tbody tr.group-head td {
+    background: var(--ground-2);
+    padding: 10px 12px 8px;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--corten-deep);
+    font-weight: 700;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* --- SVG network diagram --- */
+  .svg-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: var(--panel);
+    padding: 18px;
+    margin-top: 20px;
+  }
+  svg.network { display: block; width: 100%; height: auto; min-width: 820px; }
+
+  figcaption.cap {
+    margin-top: 12px;
+    font-size: 12.5px;
+    color: var(--muted);
+    max-width: 84ch;
+    line-height: 1.55;
+  }
+  figcaption.cap b { color: var(--ink); font-weight: 600; }
+
+  /* --- RACI table --- */
+  .raci-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: var(--panel);
+    margin-top: 20px;
+  }
+  table.raci {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    min-width: 780px;
+    table-layout: fixed;
+  }
+  table.raci th {
+    padding: 12px 10px;
+    text-align: left;
+    background: var(--panel-2);
+    border-bottom: 1px solid var(--rule-strong);
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  table.raci td {
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: middle;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+  table.raci tbody tr:last-child td { border-bottom: 0; }
+  table.raci td.proc {
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--panel-2);
+    font-size: 12.5px;
+    border-right: 1px solid var(--rule);
+  }
+  table.raci td.raci-cell {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: var(--ink-2);
+    text-align: center;
+  }
+  .raci-legend {
+    margin-top: 14px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .raci-legend b { color: var(--corten-deep); font-weight: 700; margin-right: 4px; font-family: var(--mono); }
+
+  /* --- Footer --- */
+  footer.foot {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    color: var(--faint);
+    font-size: 11.5px;
+    font-family: var(--mono);
+    letter-spacing: 0.06em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    text-transform: uppercase;
+  }
+</style>
+
+<div class="page">
+
+  <header class="mast">
+    <div class="brand"><b>Corten Energy</b> &nbsp;·&nbsp; Nervve<sup style="font-size:.6em">™</sup> platform</div>
+    <div class="meta">
+      <span>Doc · Stakeholder map</span>
+      <span>Rev 01 · 2026-08-11</span>
+    </div>
+  </header>
+
+  <div class="title-row">
+    <div class="eyebrow">Governance &amp; Ecosystem</div>
+    <h1>Every stakeholder Nervve touches, along five governance dimensions.</h1>
+    <p class="kicker">Rows are the parties that touch the platform &mdash; regulators, commercial counterparties, infrastructure providers, trust anchors, Nervve&#39;s own roles. Columns are the five dimensions along which any real grid-capacity marketplace must be governed. Each cell says what that stakeholder actually does under that dimension. Reads as a hiring guide, a regulator briefing appendix, and a RACI baseline &mdash; not decoration.</p>
+  </div>
+
+  <section id="frame">
+    <h2><span class="n">§ 01</span> Framing</h2>
+    <p class="h-sub">What this document is, what it is not, and how it earns its keep alongside the technical docs.</p>
+    <div class="frame">
+      <p>The gap analysis, solo build plan, and target-state stack proposals tell you <b>what</b> Nervve is and <b>how</b> it is built. They say very little about <b>who</b> the platform accountably serves and answers to. This document fills that gap.</p>
+      <p>Five dimensions carry every consequential relationship the platform has with the outside world: <b>information flow</b> (what data moves in and out), <b>control mechanisms</b> (who is authorised to make what call), <b>trading &amp; clearing</b> (who plays what role in a live trade), <b>audit trail</b> (who reads the record and how far back), and <b>cybersecurity</b> (who owns what control and answers when it fails). Every stakeholder shows up on at least three of these dimensions; a few show up on all five. That&#39;s the point.</p>
+      <p>Use it as: (a) a <b>hiring guide</b> &mdash; every dimension is a role Nervve is either performing itself or paying someone else to perform; (b) a <b>regulator briefing appendix</b> &mdash; the EMA sandbox conversation goes better when you can point to a page that names every party in the room; and (c) a <b>RACI baseline</b> &mdash; the last section formalises decision authority for the six most consequential operational processes.</p>
+    </div>
+  </section>
+
+  <section id="dims">
+    <h2><span class="n">§ 02</span> The five dimensions</h2>
+    <p class="h-sub">Each dimension has a colour used in the matrix below and the diagram that follows. Together they cover every non-trivial interaction the platform has with the outside world.</p>
+
+    <div class="dim-grid">
+      <div class="dim-card info">
+        <div class="dim-strip"></div>
+        <div class="head">01  ·  Information flow</div>
+        <h3>What data moves.</h3>
+        <p>Every feed, publication, and notification &mdash; meter readings inbound, dispatch signals outbound, invoices to counterparties, reports to regulators.</p>
+      </div>
+      <div class="dim-card control">
+        <div class="dim-strip"></div>
+        <div class="head">02  ·  Control mechanisms</div>
+        <h3>Who authorises what.</h3>
+        <p>Sign-off, licensing, market-participation authority, deploy authority, dispute adjudication, break-glass overrides &mdash; where authority actually sits.</p>
+      </div>
+      <div class="dim-card trade">
+        <div class="dim-strip"></div>
+        <div class="head">03  ·  Trading &amp; clearing</div>
+        <h3>Who plays what role in a trade.</h3>
+        <p>Buyer, seller, clearing operator, delivery agent, settlement rail, market referee &mdash; the classical exchange roles, applied to a grid-capacity marketplace.</p>
+      </div>
+      <div class="dim-card audit">
+        <div class="dim-strip"></div>
+        <div class="head">04  ·  Audit trail</div>
+        <h3>Who reads the record.</h3>
+        <p>Who has visibility into which events, over what retention window, and via what verification path (WORM logs, HSM-signed Merkle roots, TSA timestamps).</p>
+      </div>
+      <div class="dim-card cyber">
+        <div class="dim-strip"></div>
+        <div class="head">05  ·  Cybersecurity</div>
+        <h3>Who owns what control.</h3>
+        <p>CII designation, target-architecture ownership, incident response, monitoring, attestation, PDPA obligations &mdash; and who answers when a control fails.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="matrix">
+    <h2><span class="n">§ 03</span> Stakeholder matrix</h2>
+    <p class="h-sub">Rows are stakeholders, grouped by relationship type. Columns are the five dimensions. Each cell says what that party actually does &mdash; not what they are called on the org chart.</p>
+
+    <div class="matrix-wrap">
+      <table class="matrix" aria-label="Stakeholder × dimension matrix">
+        <colgroup>
+          <col class="who">
+          <col class="dim">
+          <col class="dim">
+          <col class="dim">
+          <col class="dim">
+          <col class="dim">
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="who-h">Stakeholder</th>
+            <th class="dim-h"><span class="chip info">Info flow</span></th>
+            <th class="dim-h"><span class="chip control">Control</span></th>
+            <th class="dim-h"><span class="chip trade">Trade &amp; clear</span></th>
+            <th class="dim-h"><span class="chip audit">Audit</span></th>
+            <th class="dim-h"><span class="chip cyber">Cyber</span></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr class="group-head"><td colspan="6">Regulators &amp; public institutions</td></tr>
+
+          <tr>
+            <td class="who">EMA<span class="sub">Energy Market Authority</span></td>
+            <td class="cell-info">Publishes market rules, LCP schedules, licence conditions; receives sandbox-milestone reports and post-trade extracts from Nervve.</td>
+            <td class="cell-control">Grants and can revoke market-participant licence; sandbox variance approval; can direct cease-and-desist.</td>
+            <td class="cell-trade">Market <b>referee</b>. Defines what "cleared capacity" means and where a Nervve trade sits within the Market Rules.</td>
+            <td class="cell-audit">Reads scheduled and on-request extracts of the trade blotter, settlement runs, and dispute log.</td>
+            <td class="cell-none">Not primary — coordinates with CSA where energy CII posture is questioned.</td>
+          </tr>
+
+          <tr>
+            <td class="who">EMC<span class="sub">Energy Market Company</span></td>
+            <td class="cell-info">Publishes USEP, LCP, imbalance data on the standard cadence — Nervve consumes as reference.</td>
+            <td class="cell-none">Operates the wholesale market; does not authorise Nervve directly.</td>
+            <td class="cell-trade">Wholesale-market <b>clearing operator</b>. Nervve settles retail/capacity trades that reference EMC prices.</td>
+            <td class="cell-audit">Publishes its own audit trail; Nervve keeps received values with source-hash for reconciliation.</td>
+            <td class="cell-none">n/a</td>
+          </tr>
+
+          <tr>
+            <td class="who">CSA<span class="sub">Cyber Security Agency of Singapore</span></td>
+            <td class="cell-info">Receives incident notifications from Nervve within CCoP 2.0 SLA; sends advisories &amp; sector alerts.</td>
+            <td class="cell-control">CII designation authority; can inspect, can direct remediation, can penalise non-compliance.</td>
+            <td class="cell-none">n/a</td>
+            <td class="cell-audit">Reads annual self-attestation; can compel access to security logs &amp; incident evidence.</td>
+            <td class="cell-cyber">Primary cyber regulator. CCoP 2.0 (Energy sub-sector) sets the control floor. Nervve names a designated CISO-equivalent.</td>
+          </tr>
+
+          <tr>
+            <td class="who">PDPC<span class="sub">Personal Data Protection Commission</span></td>
+            <td class="cell-info">Receives breach notifications within 72h where the threshold is met.</td>
+            <td class="cell-control">Enforces PDPA; can require DPO appointment, can penalise breach.</td>
+            <td class="cell-none">n/a</td>
+            <td class="cell-audit">Can compel access to consent records, DPIA log, and access-audit trail.</td>
+            <td class="cell-cyber">Governs how counterparty PII is handled — encryption, retention, cross-border transfer.</td>
+          </tr>
+
+          <tr>
+            <td class="who">MAS<span class="sub">Monetary Authority of Singapore</span></td>
+            <td class="cell-info">n/a in current design (Nervve does not hold funds).</td>
+            <td class="cell-control">Would authorise as MPI if Nervve ever holds counterparty funds in flight; current stance: <b>design to avoid</b>.</td>
+            <td class="cell-none">n/a</td>
+            <td class="cell-none">n/a</td>
+            <td class="cell-none">Coordinates with CSA on financial-sector cyber where scope crosses.</td>
+          </tr>
+
+          <tr>
+            <td class="who">IRAS<span class="sub">Inland Revenue Authority Singapore</span></td>
+            <td class="cell-info">Receives GST returns per the standard filing cycle.</td>
+            <td class="cell-control">Determines tax treatment of platform fee and underlying capacity trades (open question Q-1 in the rulebook).</td>
+            <td class="cell-none">n/a</td>
+            <td class="cell-audit">Can compel access to invoice and platform-fee records for statutory retention window.</td>
+            <td class="cell-none">n/a</td>
+          </tr>
+
+          <tr class="group-head"><td colspan="6">Physical grid &amp; delivery</td></tr>
+
+          <tr>
+            <td class="who">SP Group<span class="sub">DSO + MSSL</span></td>
+            <td class="cell-info">Meter data via authorised API (half-hour + 5-min); network-topology &amp; constraint data on change.</td>
+            <td class="cell-control">Authority over the physical grid — network capacity limits, connection standards, meter accreditation.</td>
+            <td class="cell-trade">Physical <b>delivery agent</b>. Every capacity trade cleared by Nervve is physically effected through SP&#39;s network.</td>
+            <td class="cell-audit">Reads its own delivered-vs-scheduled records; may reconcile against Nervve settlement extracts on dispute.</td>
+            <td class="cell-cyber">Peer CII operator; coordinate on threat intel; boundary-controlled connection into Nervve.</td>
+          </tr>
+
+          <tr class="group-head"><td colspan="6">Commercial counterparties</td></tr>
+
+          <tr>
+            <td class="who">Capacity Holders<span class="sub">Industrial &amp; commercial sites</span></td>
+            <td class="cell-info">Publish offers into the order book; consume allocation notices, dispatch signals, and settlement statements.</td>
+            <td class="cell-control">Authorise their own offers; nominate authorised representatives for the platform; retain override on their own DERs.</td>
+            <td class="cell-trade"><b>Sellers</b>. Contract with Nervve, deliver against dispatch, receive payment via Bank/PSP.</td>
+            <td class="cell-audit">Read their own settlement runs plus a Merkle witness that independently verifies each trade.</td>
+            <td class="cell-cyber">Own the physical security of their DER estates; sign dispatch commands verified locally.</td>
+          </tr>
+
+          <tr>
+            <td class="who">Capacity Buyers<span class="sub">Data centres, factories, EV depots</span></td>
+            <td class="cell-info">Publish bids; consume allocation notices, dispatch measurements against contracted capacity, and invoices.</td>
+            <td class="cell-control">Authorise their own bids; nominate authorised representatives.</td>
+            <td class="cell-trade"><b>Buyers</b>. Draw against cleared capacity; settle bilaterally via Bank/PSP.</td>
+            <td class="cell-audit">Read their own settlement runs plus Merkle witness; can raise disputes within the rulebook window.</td>
+            <td class="cell-cyber">Own their premises&#39; identity provisioning into KeyCloak; MFA + FIDO2 on any settlement-authoritative action.</td>
+          </tr>
+
+          <tr>
+            <td class="who">Retailers / Gentailers<span class="sub">Sembcorp, Senoko, Tuas Power, etc.</span></td>
+            <td class="cell-info">Optional partner-API integration: receive allocation feeds relevant to their own retail customers; publish available flexibility.</td>
+            <td class="cell-control">Authority over their own supply portfolio; do not authorise Nervve trades but may reference them in retail contracts.</td>
+            <td class="cell-trade">Adjacent market participants. Not counterparty to a Nervve trade unless they hold or need capacity in their own right.</td>
+            <td class="cell-audit">Read their own retail-facing extracts; no direct read on Nervve internals.</td>
+            <td class="cell-cyber">Peer participants; coordinate on identity federation and shared counterparty onboarding.</td>
+          </tr>
+
+          <tr>
+            <td class="who">DER Operators / Aggregators<span class="sub">Battery, EV, PV operators</span></td>
+            <td class="cell-info">Publish availability &amp; SOC feeds; receive signed dispatch commands; publish dispatch acks and telemetry.</td>
+            <td class="cell-control">Authority to accept or decline a dispatch on behalf of a Holder; retain physical override at asset edge.</td>
+            <td class="cell-trade">Delivery agents — either principal (own the DERs) or agent (dispatch on behalf of Holders).</td>
+            <td class="cell-audit">Read dispatch history + deviation records for their fleet.</td>
+            <td class="cell-cyber">Verify HSM signature on every dispatch command locally; reject unsigned.</td>
+          </tr>
+
+          <tr class="group-head"><td colspan="6">Financial &amp; trust rails</td></tr>
+
+          <tr>
+            <td class="who">Banks / PSPs<span class="sub">GIRO, FAST, Airwallex, Stripe</span></td>
+            <td class="cell-info">Consume invoice files; publish payment-confirmation events back.</td>
+            <td class="cell-control">Own payment finality (irrevocable once cleared).</td>
+            <td class="cell-trade">Settlement <b>rail</b>. Counterparties pay each other; Nervve reconciles.</td>
+            <td class="cell-audit">Bank statements reconciled by Nervve; discrepancy triggers investigation.</td>
+            <td class="cell-none">Providers&#39; own security — Nervve minimises data shared.</td>
+          </tr>
+
+          <tr>
+            <td class="who">RFC 3161 TSA<span class="sub">Trusted timestamp authority</span></td>
+            <td class="cell-info">Consumes settlement-run Merkle roots; returns signed timestamps.</td>
+            <td class="cell-control">Independent — the whole point is that Nervve does not control it.</td>
+            <td class="cell-none">n/a</td>
+            <td class="cell-audit"><b>Ground truth</b> for "when did this trade complete". Verifiable years later by any counterparty.</td>
+            <td class="cell-cyber">External trust anchor; verify TSA certificate chain and RFC 3161 policy OID.</td>
+          </tr>
+
+          <tr class="group-head"><td colspan="6">Governance, assurance &amp; advisory</td></tr>
+
+          <tr>
+            <td class="who">External Auditor<span class="sub">SOC 2 / ISO 27001 / CCoP attestor</span></td>
+            <td class="cell-info">Consumes audit-scope evidence; publishes attestation reports.</td>
+            <td class="cell-control">Attestation authority; can withhold certification.</td>
+            <td class="cell-none">n/a directly.</td>
+            <td class="cell-audit">Deepest read authority: samples the WORM store, walks the Merkle proofs, tests incident response.</td>
+            <td class="cell-cyber">Tests every CCoP control; findings drive the remediation backlog.</td>
+          </tr>
+
+          <tr>
+            <td class="who">Retained SOC<span class="sub">MDR provider — in-region SG, 24×7</span></td>
+            <td class="cell-info">Ingests Nervve platform logs (Security Lake feed); publishes alerts + weekly threat-briefs.</td>
+            <td class="cell-control">Contract-defined authority to isolate a workload during an active incident.</td>
+            <td class="cell-none">n/a</td>
+            <td class="cell-audit">Retains SIEM data per CCoP-aligned window; source for post-incident review.</td>
+            <td class="cell-cyber">24×7 detection &amp; response; MTTA / MTTR targets in contract; quarterly tabletop.</td>
+          </tr>
+
+          <tr>
+            <td class="who">Legal Counsel<span class="sub">SG-qualified; energy &amp; PDPA specialism</span></td>
+            <td class="cell-info">Consumes rulebook drafts, contract drafts, regulator correspondence.</td>
+            <td class="cell-control">Advises on which decisions require regulator engagement; drafts every material contract.</td>
+            <td class="cell-none">n/a</td>
+            <td class="cell-audit">Reads dispute records with privilege; represents Nervve in any counterparty dispute.</td>
+            <td class="cell-cyber">Advises on breach notification, cross-border data transfer, regulator engagement.</td>
+          </tr>
+
+          <tr class="group-head"><td colspan="6">Nervve internal roles</td></tr>
+
+          <tr>
+            <td class="who">Founder / CEO<span class="sub">J Y Low</span></td>
+            <td class="cell-info">Consumes every internal &amp; external channel until the org grows &mdash; single point of context.</td>
+            <td class="cell-control">Ultimate authority on strategy, ADRs, external commitments. Signs off any change to a protected file.</td>
+            <td class="cell-trade">Not a party to any trade — recuses on any decision that affects a counterparty they know.</td>
+            <td class="cell-audit">Break-glass access to any read; every use logged and reviewed by CISO within 24h.</td>
+            <td class="cell-cyber">Accountable to CSA for CII posture until an in-house CISO is hired.</td>
+          </tr>
+
+          <tr>
+            <td class="who">Fractional CISO / DPO<span class="sub">~4h / month at Phase 0; expands</span></td>
+            <td class="cell-info">Consumes security-architecture docs, incident reports, DPIA drafts.</td>
+            <td class="cell-control">Sign-off authority on security-target changes; authorises access-grant exceptions.</td>
+            <td class="cell-none">n/a</td>
+            <td class="cell-audit">Reads security logs, break-glass usage, incident timelines.</td>
+            <td class="cell-cyber">Owns the security-target document; co-signs annual CCoP self-attestation; commands incident response.</td>
+          </tr>
+
+          <tr>
+            <td class="who">Operator<span class="sub">Ops role — 24×7 rota from Phase 2</span></td>
+            <td class="cell-info">Consumes dashboards, alerts, dispatch console; publishes operational notes on any exception.</td>
+            <td class="cell-control">Dispatch overrides, kill-switch execution, incident-response first responder.</td>
+            <td class="cell-trade">Runs the daily &amp; the periodic settlement close; adjudicates unresolved deviations before settlement.</td>
+            <td class="cell-audit">Reads every operational event and dispatch log; annotates for post-incident review.</td>
+            <td class="cell-cyber">Rotates operational secrets on schedule; escalates to CISO on any security-scoped alert.</td>
+          </tr>
+
+          <tr>
+            <td class="who">Advisory board<span class="sub">Regulation · Capital · Market design</span></td>
+            <td class="cell-info">Consumes quarterly board packs, ADR log, strategic-decision briefings.</td>
+            <td class="cell-control">Advisory, not directive. Reviews major strategic ADRs and can recommend against.</td>
+            <td class="cell-none">n/a</td>
+            <td class="cell-audit">Reads quarterly summaries; can request specific pulls for material items.</td>
+            <td class="cell-none">n/a</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="network">
+    <h2><span class="n">§ 04</span> Ecosystem view</h2>
+    <p class="h-sub">The same stakeholders, drawn once so their positional relationships to Nervve are visible at a glance. Arrows show <span class="chip info" style="vertical-align:baseline">information flow</span> only; the matrix carries the four other dimensions.</p>
+
+    <figure>
+      <div class="svg-wrap">
+        <svg class="network" viewBox="0 0 1360 780" role="img"
+             aria-label="Ecosystem view of Nervve stakeholders: Nervve sits at the centre; regulators form the top band (EMA, EMC, CSA, PDPC, MAS, IRAS); commercial counterparties on the left (Capacity Holders, Buyers, Retailers, DER operators); physical delivery and financial rails on the right (SP Group, Bank/PSP, RFC 3161 TSA); governance and assurance below (External Auditor, Retained SOC, Fractional CISO, Legal Counsel). Arrows indicate information flow direction.">
+
+          <defs>
+            <marker id="net-arr" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--dim-info)" />
+            </marker>
+          </defs>
+
+          <!-- Central Nervve node -->
+          <rect x="590" y="330" width="180" height="120" rx="4"
+                fill="var(--corten-wash)" stroke="var(--corten)" stroke-width="2" />
+          <text x="680" y="366" text-anchor="middle"
+                font-family="var(--serif)" font-size="19" fill="var(--ink)"
+                font-weight="500">Nervve</text>
+          <text x="680" y="386" text-anchor="middle"
+                font-family="var(--sans)" font-size="10.5" fill="var(--corten-deep)"
+                font-weight="700" letter-spacing="0.16em">MARKETPLACE</text>
+          <text x="680" y="410" text-anchor="middle"
+                font-family="var(--sans)" font-size="11" fill="var(--muted)">Clearing · dispatch ·</text>
+          <text x="680" y="424" text-anchor="middle"
+                font-family="var(--sans)" font-size="11" fill="var(--muted)">settlement · audit</text>
+
+          <!-- =============== TOP: REGULATORS =============== -->
+          <text x="30" y="42" font-family="var(--sans)" font-size="10.5"
+                font-weight="700" letter-spacing="0.22em" fill="var(--corten-deep)">
+            REGULATORS &amp; PUBLIC INSTITUTIONS
+          </text>
+
+          <g id="reg-band">
+            <!-- EMA -->
+            <rect x="120" y="60" width="150" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--navy)" stroke-width="1" />
+            <text x="195" y="82" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">EMA</text>
+            <text x="195" y="99" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">market rules · licence</text>
+            <!-- EMC -->
+            <rect x="290" y="60" width="150" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--navy)" stroke-width="1" />
+            <text x="365" y="82" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">EMC</text>
+            <text x="365" y="99" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">USEP · LCP feeds</text>
+            <!-- CSA -->
+            <rect x="460" y="60" width="150" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--dim-cyber)" stroke-width="1.5" />
+            <text x="535" y="82" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">CSA</text>
+            <text x="535" y="99" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">CCoP 2.0 · CII</text>
+            <!-- PDPC -->
+            <rect x="630" y="60" width="150" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--dim-cyber)" stroke-width="1.5" />
+            <text x="705" y="82" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">PDPC</text>
+            <text x="705" y="99" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">PDPA</text>
+            <!-- MAS -->
+            <rect x="800" y="60" width="150" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--navy)" stroke-width="1"
+                  stroke-dasharray="4 3" />
+            <text x="875" y="82" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">MAS</text>
+            <text x="875" y="99" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">payment scoping only</text>
+            <!-- IRAS -->
+            <rect x="970" y="60" width="150" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--navy)" stroke-width="1" />
+            <text x="1045" y="82" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">IRAS</text>
+            <text x="1045" y="99" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">GST · tax</text>
+          </g>
+
+          <!-- Advisory board on far right of top band -->
+          <rect x="1140" y="60" width="190" height="52" rx="3"
+                fill="var(--panel)" stroke="var(--rule-strong)" stroke-width="1"
+                stroke-dasharray="3 3" />
+          <text x="1235" y="82" text-anchor="middle" font-family="var(--sans)"
+                font-size="12" font-weight="700" fill="var(--ink)">Advisory board</text>
+          <text x="1235" y="99" text-anchor="middle" font-family="var(--sans)"
+                font-size="10" fill="var(--muted)">reg · capital · market design</text>
+
+          <!-- =============== LEFT: COMMERCIAL =============== -->
+          <text x="30" y="200" font-family="var(--sans)" font-size="10.5"
+                font-weight="700" letter-spacing="0.22em" fill="var(--corten-deep)">
+            COMMERCIAL COUNTERPARTIES
+          </text>
+
+          <g id="comm">
+            <rect x="30" y="220" width="200" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--dim-trade)" stroke-width="1.5" />
+            <text x="130" y="242" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">Capacity Holders</text>
+            <text x="130" y="259" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">sellers · site owners</text>
+
+            <rect x="30" y="286" width="200" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--dim-trade)" stroke-width="1.5" />
+            <text x="130" y="308" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">Capacity Buyers</text>
+            <text x="130" y="325" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">buyers · loads / DCs</text>
+
+            <rect x="30" y="352" width="200" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--navy)" stroke-width="1" />
+            <text x="130" y="374" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">Retailers / Gentailers</text>
+            <text x="130" y="391" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">adjacent · partner-API</text>
+
+            <rect x="30" y="418" width="200" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--navy)" stroke-width="1" />
+            <text x="130" y="440" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">DER Operators</text>
+            <text x="130" y="457" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">battery · EV · PV</text>
+          </g>
+
+          <!-- =============== RIGHT: DELIVERY + FINANCIAL + TRUST =============== -->
+          <text x="1030" y="200" font-family="var(--sans)" font-size="10.5"
+                font-weight="700" letter-spacing="0.22em" fill="var(--corten-deep)">
+            DELIVERY, RAILS &amp; TRUST
+          </text>
+
+          <g id="right-col">
+            <rect x="1130" y="220" width="200" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--dim-trade)" stroke-width="1.5" />
+            <text x="1230" y="242" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">SP Group</text>
+            <text x="1230" y="259" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">DSO + MSSL · delivery</text>
+
+            <rect x="1130" y="286" width="200" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--dim-trade)" stroke-width="1.5" />
+            <text x="1230" y="308" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">Bank / PSP</text>
+            <text x="1230" y="325" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">GIRO · FAST · bilateral</text>
+
+            <rect x="1130" y="352" width="200" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--dim-audit)" stroke-width="1.5" />
+            <text x="1230" y="374" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">RFC 3161 TSA</text>
+            <text x="1230" y="391" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">timestamp anchor</text>
+
+            <rect x="1130" y="418" width="200" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--dim-audit)" stroke-width="1.5" />
+            <text x="1230" y="440" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">External Auditor</text>
+            <text x="1230" y="457" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">SOC 2 · ISO 27001 · CCoP</text>
+          </g>
+
+          <!-- =============== BOTTOM: GOVERNANCE / ASSURANCE =============== -->
+          <text x="30" y="560" font-family="var(--sans)" font-size="10.5"
+                font-weight="700" letter-spacing="0.22em" fill="var(--corten-deep)">
+            NERVVE INTERNAL &amp; RETAINED ASSURANCE
+          </text>
+
+          <g id="bottom-band">
+            <rect x="120" y="580" width="180" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--corten)" stroke-width="1.5" />
+            <text x="210" y="602" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">Founder / CEO</text>
+            <text x="210" y="619" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">strategy · ADRs · signoff</text>
+
+            <rect x="320" y="580" width="180" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--dim-cyber)" stroke-width="1.5" />
+            <text x="410" y="602" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">CISO / DPO</text>
+            <text x="410" y="619" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">fractional first</text>
+
+            <rect x="520" y="580" width="180" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--navy)" stroke-width="1" />
+            <text x="610" y="602" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">Operator</text>
+            <text x="610" y="619" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">24×7 rota · dispatch console</text>
+
+            <rect x="720" y="580" width="180" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--dim-cyber)" stroke-width="1.5" />
+            <text x="810" y="602" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">Retained SOC</text>
+            <text x="810" y="619" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">MDR · in-region SG · 24×7</text>
+
+            <rect x="920" y="580" width="180" height="52" rx="3"
+                  fill="var(--panel)" stroke="var(--navy)" stroke-width="1" />
+            <text x="1010" y="602" text-anchor="middle" font-family="var(--sans)"
+                  font-size="12.5" font-weight="700" fill="var(--ink)">Legal Counsel</text>
+            <text x="1010" y="619" text-anchor="middle" font-family="var(--sans)"
+                  font-size="10" fill="var(--muted)">SG · energy + PDPA</text>
+          </g>
+
+          <!-- =============== ARROWS: information flow =============== -->
+          <!-- Regulators → Nervve (rules, feeds, advisories) -->
+          <line x1="195" y1="112" x2="595" y2="334"
+                stroke="var(--dim-info)" stroke-width="1.3"
+                marker-end="url(#net-arr)" opacity="0.75" />
+          <line x1="365" y1="112" x2="620" y2="332"
+                stroke="var(--dim-info)" stroke-width="1.3"
+                marker-end="url(#net-arr)" opacity="0.75" />
+
+          <!-- Nervve → CSA (incident notifications), Nervve → PDPC (breach notifications) -->
+          <line x1="680" y1="330" x2="535" y2="114"
+                stroke="var(--dim-info)" stroke-width="1.3"
+                marker-end="url(#net-arr)" opacity="0.75" />
+          <line x1="700" y1="330" x2="705" y2="114"
+                stroke="var(--dim-info)" stroke-width="1.3"
+                marker-end="url(#net-arr)" opacity="0.75" />
+          <!-- Nervve → IRAS (GST returns) -->
+          <line x1="750" y1="330" x2="1045" y2="114"
+                stroke="var(--dim-info)" stroke-width="1.3"
+                marker-end="url(#net-arr)" opacity="0.6" />
+
+          <!-- Nervve ↔ Advisory board (packs) -->
+          <line x1="770" y1="360" x2="1140" y2="94"
+                stroke="var(--dim-info)" stroke-width="1.1"
+                marker-end="url(#net-arr)" opacity="0.55"
+                stroke-dasharray="4 3" />
+
+          <!-- Commercial ↔ Nervve -->
+          <line x1="230" y1="246" x2="590" y2="356"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+          <line x1="590" y1="366" x2="230" y2="256"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+          <line x1="230" y1="312" x2="590" y2="380"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+          <line x1="590" y1="390" x2="230" y2="322"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+          <line x1="230" y1="378" x2="590" y2="400"
+                stroke="var(--dim-info)" stroke-width="1.1"
+                marker-end="url(#net-arr)" opacity="0.55"
+                stroke-dasharray="4 3" />
+          <line x1="230" y1="444" x2="590" y2="418"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+          <line x1="590" y1="428" x2="230" y2="454"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+
+          <!-- Right column ↔ Nervve -->
+          <line x1="1130" y1="246" x2="770" y2="356"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+          <line x1="770" y1="366" x2="1130" y2="256"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+          <line x1="770" y1="380" x2="1130" y2="312"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+          <line x1="1130" y1="322" x2="770" y2="390"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+          <line x1="770" y1="400" x2="1130" y2="378"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" opacity="0.9" />
+          <line x1="770" y1="418" x2="1130" y2="444"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+
+          <!-- Nervve ↔ bottom internal roles -->
+          <line x1="640" y1="450" x2="210" y2="578"
+                stroke="var(--dim-info)" stroke-width="1.1"
+                marker-end="url(#net-arr)" opacity="0.55"
+                stroke-dasharray="4 3" />
+          <line x1="660" y1="450" x2="410" y2="578"
+                stroke="var(--dim-info)" stroke-width="1.1"
+                marker-end="url(#net-arr)" opacity="0.55"
+                stroke-dasharray="4 3" />
+          <line x1="680" y1="450" x2="610" y2="578"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+          <line x1="610" y1="578" x2="680" y2="450"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+          <line x1="700" y1="450" x2="810" y2="578"
+                stroke="var(--dim-info)" stroke-width="1.4"
+                marker-end="url(#net-arr)" />
+          <line x1="720" y1="450" x2="1010" y2="578"
+                stroke="var(--dim-info)" stroke-width="1.1"
+                marker-end="url(#net-arr)" opacity="0.55"
+                stroke-dasharray="4 3" />
+
+          <!-- Bottom band separator -->
+          <line x1="30" y1="700" x2="1330" y2="700"
+                stroke="var(--rule-strong)" stroke-width="0.4" />
+          <text x="680" y="722" text-anchor="middle" font-family="var(--sans)"
+                font-size="10" font-weight="700" fill="var(--muted)"
+                letter-spacing="0.16em">SOLID · CONTINUOUS FLOW  ·  DASHED · PERIODIC / ADVISORY  ·  BORDER COLOUR · PRIMARY DIMENSION FOR THAT PARTY</text>
+        </svg>
+      </div>
+      <figcaption class="cap">
+        <b>What the diagram argues.</b> Nervve sits at the centre because it is the clearing house — every trade goes through it and every record originates here. The four other zones are the world Nervve answers to: regulators <i>above</i>, counterparties <i>on either side</i>, retained assurance and internal roles <i>below</i>. Border colours mark the primary dimension for each stakeholder (Corten for control, gold for trading, sage for audit, crimson for cyber, navy for informational only) — so a reader can see at a glance whether a party is primarily a control node, a trading node, an audit node, or a cyber node.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section id="raci">
+    <h2><span class="n">§ 05</span> Decision authority — RACI on the six critical processes</h2>
+    <p class="h-sub">For the six processes where an ambiguous authority chain becomes a customer or regulator problem. <b>R</b> = does the work; <b>A</b> = accountable, one per row; <b>C</b> = consulted before action; <b>I</b> = informed after.</p>
+
+    <div class="raci-wrap">
+      <table class="raci" aria-label="RACI matrix">
+        <colgroup>
+          <col style="width:22%">
+          <col style="width:13%">
+          <col style="width:13%">
+          <col style="width:13%">
+          <col style="width:13%">
+          <col style="width:13%">
+          <col style="width:13%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Process</th>
+            <th>Founder / CEO</th>
+            <th>CISO / DPO</th>
+            <th>Operator</th>
+            <th>Counterparty</th>
+            <th>EMA / CSA</th>
+            <th>Auditor / SOC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="proc">Clearing a trade</td>
+            <td class="raci-cell">I</td>
+            <td class="raci-cell">—</td>
+            <td class="raci-cell">R · A</td>
+            <td class="raci-cell">C</td>
+            <td class="raci-cell">I (reporting)</td>
+            <td class="raci-cell">I (evidence)</td>
+          </tr>
+          <tr>
+            <td class="proc">Dispatching a signal</td>
+            <td class="raci-cell">I</td>
+            <td class="raci-cell">C (design)</td>
+            <td class="raci-cell">R · A</td>
+            <td class="raci-cell">I (via ack)</td>
+            <td class="raci-cell">—</td>
+            <td class="raci-cell">I (trail)</td>
+          </tr>
+          <tr>
+            <td class="proc">Closing a settlement window</td>
+            <td class="raci-cell">A (Phase 0-1)</td>
+            <td class="raci-cell">—</td>
+            <td class="raci-cell">R</td>
+            <td class="raci-cell">C</td>
+            <td class="raci-cell">I</td>
+            <td class="raci-cell">I</td>
+          </tr>
+          <tr>
+            <td class="proc">Resolving a counterparty dispute</td>
+            <td class="raci-cell">A</td>
+            <td class="raci-cell">C (data)</td>
+            <td class="raci-cell">R</td>
+            <td class="raci-cell">C · I</td>
+            <td class="raci-cell">I</td>
+            <td class="raci-cell">C (privileged legal)</td>
+          </tr>
+          <tr>
+            <td class="proc">Handling a security incident</td>
+            <td class="raci-cell">I / A (business)</td>
+            <td class="raci-cell">R · A (technical)</td>
+            <td class="raci-cell">R (first-responder)</td>
+            <td class="raci-cell">I (per SLA)</td>
+            <td class="raci-cell">I (CSA per CCoP SLA)</td>
+            <td class="raci-cell">C (SOC) · I (auditor)</td>
+          </tr>
+          <tr>
+            <td class="proc">Responding to a regulator query</td>
+            <td class="raci-cell">R · A</td>
+            <td class="raci-cell">C (cyber &amp; PII)</td>
+            <td class="raci-cell">C (ops facts)</td>
+            <td class="raci-cell">—</td>
+            <td class="raci-cell">C (the asker)</td>
+            <td class="raci-cell">C (legal)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="raci-legend">
+      <span><b>R</b> Responsible (does the work)</span>
+      <span><b>A</b> Accountable (one per row)</span>
+      <span><b>C</b> Consulted (before)</span>
+      <span><b>I</b> Informed (after)</span>
+    </div>
+  </section>
+
+  <section id="notes">
+    <h2><span class="n">§ 06</span> Notes for the founder</h2>
+    <p class="h-sub">A few observations that are more useful as prose than as table cells.</p>
+
+    <div class="frame">
+      <p><b>Every empty cell is a hidden liability.</b> When a row's dimension shows <i>n/a</i>, sanity-check that the party genuinely has no role &mdash; not that someone forgot to ask. Empty cells that should not be empty are how governance gaps become regulator findings.</p>
+      <p><b>Nervve is deliberately small on the trading row.</b> The platform is the clearing house, not a counterparty. Recuse the Founder / CEO from any trade whose counterparties they personally know until an in-house Compliance officer exists. This is not paranoia; it is the standard governance a market operator answers for.</p>
+      <p><b>The four "primary" borders in the ecosystem view are the four hires you cannot postpone.</b> Corten border (Founder / CEO) exists. Gold-bordered nodes (Capacity Holders, Buyers, SP Group, Bank/PSP) are already lined up by the pilot. Crimson-bordered nodes (CISO/DPO, Retained SOC, CSA counterpart) become active in Phase 2 &mdash; retain the CISO now, contract the SOC before the first live dispatch, engage CSA the moment the pilot has real counterparties.</p>
+      <p><b>The Advisory board is not a control node.</b> They advise, they do not authorise. Every row on the RACI table has exactly one <i>A</i>; the Advisory board never holds it. If a board member starts making calls, either promote them into an executive role or clarify the boundary. Both are fine outcomes; the mixed state is not.</p>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>Nervve stakeholder map · governance appendix</span>
+    <span>Rev 01 · 2026-08-11</span>
+  </footer>
+
+</div>
